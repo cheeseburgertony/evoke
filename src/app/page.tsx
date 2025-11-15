@@ -3,10 +3,10 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import Client from "./client";
 
-const Page = () => {
+const Page = async () => {
   // 在服务器端预取数据，直接调用api获取，不需要通过HTTP请求
   const queryClient = getQueryClient();
-  queryClient.prefetchQuery(
+  await queryClient.prefetchQuery(
     trpc.createAI.queryOptions({ text: "Tony Prefetch" })
   );
 
