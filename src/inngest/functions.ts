@@ -11,7 +11,8 @@ export const helloWorld = inngest.createFunction(
     const summarizer = createAgent({
       model: openai({
         model: "deepseek-chat",
-        baseUrl: "https://api.deepseek.com/v1",
+        baseUrl: process.env.DEEPSEEK_BASE_URL,
+        apiKey: process.env.DEEPSEEK_API_KEY,
       }),
       name: "code-agent",
       system:
