@@ -1,22 +1,29 @@
-import { getQueryClient, trpc } from "@/trpc/server";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { Suspense } from "react";
-import Client from "./client";
+"use client";
 
-const Page = async () => {
-  // 在服务器端预取数据，直接调用api获取，不需要通过HTTP请求
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(
-    trpc.createAI.queryOptions({ text: "Tony Prefetch" })
+import { Button } from "@/components/ui/button";
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+const Page = () => {
+  const trpc = useTRPC();
+  const invoke = useMutation(
+    trpc.invoke.mutationOptions({
+      onSuccess: () => {
+        toast.success("后台任务触发成功");
+      },
+    })
   );
 
   return (
-    // 使用 HydrationBoundary 将预取的数据注入到客户端缓存
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Client />
-      </Suspense>
-    </HydrationBoundary>
+    <div className="p-4 mx-auto max-w-7xl">
+      <Button
+        disabled={invoke.isPending}
+        onClick={() => invoke.mutate({ text: "test-email" })}
+      >
+        触发后台任务
+      </Button>
+    </div>
   );
 };
 
