@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
+"use client";
+
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
 const Page = () => {
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.createAI.queryOptions({ text: "Tony" }));
+
   return (
     <div>
-      <h1>Hello</h1>
-      <Button>Click Me</Button>
+      {JSON.stringify(data)}
     </div>
   );
 };
