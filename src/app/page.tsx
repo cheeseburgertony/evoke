@@ -1,16 +1,22 @@
-"use client";
-
-import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
+import { getQueryClient, trpc } from "@/trpc/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Suspense } from "react";
+import Client from "./client";
 
 const Page = () => {
-  const trpc = useTRPC();
-  const { data } = useQuery(trpc.createAI.queryOptions({ text: "Tony" }));
+  // 在服务器端预取数据，直接调用api获取，不需要通过HTTP请求
+  const queryClient = getQueryClient();
+  queryClient.prefetchQuery(
+    trpc.createAI.queryOptions({ text: "Tony Prefetch" })
+  );
 
   return (
-    <div>
-      {JSON.stringify(data)}
-    </div>
+    // 使用 HydrationBoundary 将预取的数据注入到客户端缓存
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Client />
+      </Suspense>
+    </HydrationBoundary>
   );
 };
 
