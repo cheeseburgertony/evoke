@@ -1,4 +1,9 @@
-import { openai, createAgent, createTool } from "@inngest/agent-kit";
+import {
+  openai,
+  createAgent,
+  createTool,
+  createNetwork,
+} from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import z from "zod";
 import { PROMPT } from "@/prompt";
@@ -134,6 +139,7 @@ export const helloWorld = inngest.createFunction(
       lifecycle: {
         // 每次工具调用后触发
         onResponse: async ({ result, network }) => {
+          console.log("result", result);
           const lastAIMessageText = lastAIMessageTextContent(result);
           // 如果AI回复中包含<task_summary>，表示任务结束，则将其保存到network状态中
           if (lastAIMessageText && network) {
@@ -147,9 +153,26 @@ export const helloWorld = inngest.createFunction(
       },
     });
 
-    const { output } = await codeAgent.run(
-      `Write the following snippet: ${event.data.value}`
-    );
+    const network = createNetwork({
+      name: "coding-agent-network",
+      agents: [codeAgent],
+      // 最大迭代次数，防止无限循环
+      maxIter: 15,
+      router: async ({ network }) => {
+        const summary = network.state.data.summary;
+
+        // 如果任务已有summary，表示结束，停止调用agent
+        if (summary) {
+          return;
+        }
+
+        // 如果没有summary，继续调用agent
+        return codeAgent;
+      },
+    });
+
+    // 让网络自动调用agent完成任务
+    const result = await network.run(event.data.value);
 
     // 获取沙盒url
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
@@ -158,6 +181,11 @@ export const helloWorld = inngest.createFunction(
       return `http://${host}`;
     });
 
-    return { output, sandboxUrl };
+    return {
+      url: sandboxUrl,
+      title: "Fragment",
+      files: result.state.data.files,
+      summary: result.state.data.summary,
+    };
   }
 );
