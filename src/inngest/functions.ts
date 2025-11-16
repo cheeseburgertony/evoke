@@ -3,6 +3,7 @@ import { Sandbox } from "@e2b/code-interpreter";
 import { inngest } from "./client";
 import { getSandbox } from "./utils";
 import z, { file } from "zod";
+import { PROMPT } from "@/prompt";
 
 // 创建一个 Inngest 函数，监听 "test/hello.world" 事件
 // 定义函数
@@ -19,14 +20,17 @@ export const helloWorld = inngest.createFunction(
 
     // codeAgent生成代码
     const codeAgent = createAgent({
+      name: "code-agent",
+      description: "An expert coding agent",
+      system: PROMPT,
       model: openai({
         model: "deepseek-chat",
         baseUrl: process.env.DEEPSEEK_BASE_URL,
         apiKey: process.env.DEEPSEEK_API_KEY,
+        defaultParameters: {
+          temperature: 0.1,
+        },
       }),
-      name: "code-agent",
-      system:
-        "You are an expert next.js developer. You write readable, maintainable code. You write simple Next.js & React snippets.",
       tools: [
         // 终端工具，允许在沙盒中运行命令
         createTool({
