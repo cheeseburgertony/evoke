@@ -10,7 +10,6 @@
 # import { Sandbox } from 'e2b'
 # const sandbox = await Sandbox.create('evoke-nextjs-test-1')
 
-team_id = "0b0ea5a0-5815-4547-98d4-5f5d82309bb6"
 start_cmd = "/compile_page.sh"
 dockerfile = "e2b.Dockerfile"
 template_name = "evoke-nextjs-test-1"
