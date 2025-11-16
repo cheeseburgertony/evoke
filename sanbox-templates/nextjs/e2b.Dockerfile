@@ -1,5 +1,5 @@
-# 使用官方 Node.js 21 的 slim 版本作为基础镜像
-FROM node:21-slim
+# 使用官方 Node.js 20 的 slim 版本作为基础镜像
+FROM node:20-slim
 
 # 使用apt-get来安装curl
 RUN apt-get update && apt-get install -y curl && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -12,11 +12,11 @@ RUN chmod +x /compile_page.sh
 WORKDIR /home/user/nextjs-app
 
 # 创建一个新的 Next.js 应用
-RUN npx --yes create-next-app@15 . --yes
+RUN npx --yes create-next-app@15.3.3 . --yes
 
 # 初始化 shadcn/ui 并添加所有组件
-RUN npx --yes shadcn@latest init --yes -b neutral --force
-RUN npx --yes shadcn@latest add --all --yes
+RUN npx --yes shadcn@2.6.3 init --yes -b neutral --force
+RUN npx --yes shadcn@2.6.3 add --all --yes
 
 # 将 Nextjs 应用移动到主目录并删除 nextjs-app 目录
 RUN mv /home/user/nextjs-app/* /home/user/ && rm -rf /home/user/nextjs-app
