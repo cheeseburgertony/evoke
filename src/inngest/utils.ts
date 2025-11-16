@@ -12,12 +12,12 @@ export const lastAIMessageTextContent = (result: AgentResult) => {
     (message) => message.role === "assistant"
   );
 
-  const messgae = result.output[lastAIMessageIndex] as TextMessage | undefined;
+  const message = result.output[lastAIMessageIndex] as TextMessage | undefined;
 
-  if (messgae?.content) {
-    return typeof messgae.content === "string"
-      ? messgae.content
-      : messgae.content.map((c) => c.text).join("");
+  if (message?.content) {
+    return typeof message.content === "string"
+      ? message.content
+      : message.content.map((c) => c.text).join("");
   }
   return undefined;
 };

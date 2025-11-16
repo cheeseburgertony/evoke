@@ -5,7 +5,7 @@ import {
   createNetwork,
 } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
-import z from "zod";
+import { z } from "zod";
 import { PROMPT } from "@/prompt";
 import { inngest } from "./client";
 import { getSandbox, lastAIMessageTextContent } from "./utils";
