@@ -3,7 +3,7 @@ import { Sandbox } from "@e2b/code-interpreter";
 import z from "zod";
 import { PROMPT } from "@/prompt";
 import { inngest } from "./client";
-import { getSandbox } from "./utils";
+import { getSandbox, lastAIMessageTextContent } from "./utils";
 
 // 创建一个 Inngest 函数，监听 "test/hello.world" 事件
 // 定义函数
@@ -83,7 +83,8 @@ export const helloWorld = inngest.createFunction(
               async () => {
                 try {
                   // 获取当前文件状态
-                  const updatedFiles = network.state.data.files || {};                  const sandbox = await getSandbox(sandboxId);
+                  const updatedFiles = network.state.data.files || {};
+                  const sandbox = await getSandbox(sandboxId);
                   for (const file of files) {
                     // 遍历文件，写入/更新内容
                     await sandbox.files.write(file.path, file.content);
@@ -129,6 +130,21 @@ export const helloWorld = inngest.createFunction(
           },
         }),
       ],
+
+      lifecycle: {
+        // 每次工具调用后触发
+        onResponse: async ({ result, network }) => {
+          const lastAIMessageText = lastAIMessageTextContent(result);
+          // 如果AI回复中包含<task_summary>，表示任务结束，则将其保存到network状态中
+          if (lastAIMessageText && network) {
+            if (lastAIMessageText.includes("<task_summary>")) {
+              network.state.data.summary = lastAIMessageText;
+            }
+          }
+
+          return result;
+        },
+      },
     });
 
     const { output } = await codeAgent.run(
