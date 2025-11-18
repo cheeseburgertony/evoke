@@ -1,7 +1,7 @@
+import { Suspense } from "react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/trpc/server";
-import { Suspense } from "react";
-import { ProjectView } from "@/modules/projects/ui/project-view";
+import { ProjectView } from "@/modules/projects/ui/views/project-view";
 
 interface IPageProps {
   params: Promise<{
