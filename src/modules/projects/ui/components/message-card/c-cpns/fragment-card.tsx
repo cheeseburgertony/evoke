@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronRightIcon, Code2Icon } from "lucide-react";
 import { Fragment } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
