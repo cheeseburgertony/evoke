@@ -87,7 +87,7 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
               minRows={2}
               maxRows={8}
               className="pt-4 resize-none border-none w-full outline-none bg-transparent"
-              placeholder="What would you like to build?"
+              placeholder="给 Evoke 发送消息，创建一个......的项目吧"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault();
