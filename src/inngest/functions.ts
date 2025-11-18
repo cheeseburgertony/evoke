@@ -3,18 +3,24 @@ import {
   createAgent,
   createTool,
   createNetwork,
+  Tool,
 } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import { z } from "zod";
 import { PROMPT } from "@/prompt";
 import { inngest } from "./client";
 import { getSandbox, lastAIMessageTextContent } from "./utils";
+import prisma from "@/lib/prisma";
 
-// 创建一个 Inngest 函数，监听 "test/hello.world" 事件
-// 定义函数
-export const helloWorld = inngest.createFunction(
-  { id: "hello-world" }, // 配置
-  { event: "test/hello.world" }, // 监听的事件
+interface AgentState {
+  summary: string;
+  files: { [path: string]: string };
+}
+
+// 创建一个 Inngest 函数，监听 code-agent/run 事件
+export const codeAgentFunction = inngest.createFunction(
+  { id: "code-agent-function" }, // 配置
+  { event: "code-agent/run" }, // 监听的事件
   // 处理程序
   async ({ event, step }) => {
     // 获取沙盒id
@@ -24,7 +30,7 @@ export const helloWorld = inngest.createFunction(
     });
 
     // codeAgent生成代码
-    const codeAgent = createAgent({
+    const codeAgent = createAgent<AgentState>({
       name: "code-agent",
       description: "An expert coding agent",
       system: PROMPT,
@@ -81,7 +87,10 @@ export const helloWorld = inngest.createFunction(
               })
             ),
           }),
-          handler: async ({ files }, { step, network }) => {
+          handler: async (
+            { files },
+            { step, network }: Tool.Options<AgentState>
+          ) => {
             // 在沙盒中创建或更新文件
             const newFiles = await step?.run(
               "createOrUpdateFiles",
@@ -139,7 +148,6 @@ export const helloWorld = inngest.createFunction(
       lifecycle: {
         // 每次工具调用后触发
         onResponse: async ({ result, network }) => {
-          console.log("result", result);
           const lastAIMessageText = lastAIMessageTextContent(result);
           // 如果AI回复中包含<task_summary>，表示任务结束，则将其保存到network状态中
           if (lastAIMessageText && network) {
@@ -153,7 +161,7 @@ export const helloWorld = inngest.createFunction(
       },
     });
 
-    const network = createNetwork({
+    const network = createNetwork<AgentState>({
       name: "coding-agent-network",
       agents: [codeAgent],
       // 最大迭代次数，防止无限循环
@@ -174,11 +182,43 @@ export const helloWorld = inngest.createFunction(
     // 让网络自动调用agent完成任务
     const result = await network.run(event.data.value);
 
+    const isError =
+      !result.state.data.summary ||
+      Object.keys(result.state.data.files || {}).length === 0;
+
     // 获取沙盒url
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandboxId);
       const host = sandbox.getHost(3000);
       return `http://${host}`;
+    });
+
+    // 将数据保存到数据库中
+    await step.run("save-result", async () => {
+      if (isError) {
+        return await prisma.message.create({
+          data: {
+            content: "出现了一些错误，请再试一次。",
+            role: "ASSISTANT",
+            type: "ERROR",
+          },
+        });
+      }
+
+      return await prisma.message.create({
+        data: {
+          content: result.state.data.summary,
+          role: "ASSISTANT",
+          type: "RESULT",
+          fragment: {
+            create: {
+              sandboxUrl,
+              title: "Fragment",
+              files: result.state.data.files,
+            },
+          },
+        },
+      });
     });
 
     return {
