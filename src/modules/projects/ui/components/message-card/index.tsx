@@ -1,6 +1,10 @@
 "use client";
 
-import { MessageRole, MessageType, Fragment } from "@/generated/prisma/client";
+import type {
+  MessageRole,
+  MessageType,
+  Fragment,
+} from "@/generated/prisma/client";
 import { UserMessage } from "./c-cpns/user-message";
 import { AssistantMessage } from "./c-cpns/assistant-message";
 

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { format } from "date-fns";
-import { Fragment, MessageType } from "@/generated/prisma/client";
+import type { Fragment, MessageType } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { FragmentCard } from "./fragment-card";
 

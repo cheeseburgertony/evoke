@@ -1,4 +1,4 @@
-"use clinet";
+"use client";
 
 import { z } from "zod";
 import { toast } from "sonner";
