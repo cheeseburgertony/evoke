@@ -14,7 +14,7 @@ const Page = () => {
 
   const trpc = useTRPC();
   const createProject = useMutation(
-    trpc.project.create.mutationOptions({
+    trpc.projects.create.mutationOptions({
       onError: (error) => {
         toast.error(error.message);
       },
