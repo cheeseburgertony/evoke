@@ -3,14 +3,21 @@
 import { useRef, useEffect } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import type { Fragment } from "@/generated/prisma/client";
 import { MessageCard } from "./message-card";
 import { MessageForm } from "./message-form";
 
 interface IMessagesContainerProps {
   projectId: string;
+  activeFragment: Fragment | null;
+  setActiveFragment: (fragment: Fragment | null) => void;
 }
 
-export const MessagesContainer = ({ projectId }: IMessagesContainerProps) => {
+export const MessagesContainer = ({
+  projectId,
+  activeFragment,
+  setActiveFragment,
+}: IMessagesContainerProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const trpc = useTRPC();
@@ -19,13 +26,13 @@ export const MessagesContainer = ({ projectId }: IMessagesContainerProps) => {
   );
 
   useEffect(() => {
-    const lastAIMessage = messages.findLast(
-      (message) => message.role === "ASSISTANT"
+    const lastAIMessageWithFragment = messages.findLast(
+      (message) => message.role === "ASSISTANT" && !!message.fragment
     );
-    if (lastAIMessage) {
-      // TODO 触发fragment
+    if (lastAIMessageWithFragment) {
+      setActiveFragment(lastAIMessageWithFragment.fragment);
     }
-  }, [messages]);
+  }, [messages, setActiveFragment]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView();
@@ -43,8 +50,8 @@ export const MessagesContainer = ({ projectId }: IMessagesContainerProps) => {
               type={message.type}
               fragment={message.fragment}
               createdAt={message.createdAt}
-              isActiveFragment={false}
-              onFragmentClick={() => {}}
+              isActiveFragment={message.fragment?.id === activeFragment?.id}
+              onFragmentClick={() => setActiveFragment(message.fragment)}
             />
           ))}
           <div ref={bottomRef} />
