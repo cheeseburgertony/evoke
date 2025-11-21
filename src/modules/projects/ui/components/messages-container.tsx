@@ -6,6 +6,7 @@ import { useTRPC } from "@/trpc/client";
 import type { Fragment } from "@/generated/prisma/client";
 import { MessageCard } from "./message-card";
 import { MessageForm } from "./message-form";
+import { MessageLoading } from "./message-loading";
 
 interface IMessagesContainerProps {
   projectId: string;
@@ -22,8 +23,12 @@ export const MessagesContainer = ({
 
   const trpc = useTRPC();
   const { data: messages } = useSuspenseQuery(
-    trpc.messages.getMany.queryOptions({ projectId })
+    // TODO: 进行实时的消息更新
+    trpc.messages.getMany.queryOptions({ projectId }, { refetchInterval: 5000 })
   );
+
+  const lastMessage = messages[messages.length - 1];
+  const isUserLastMessage = lastMessage?.role === "USER";
 
   useEffect(() => {
     const lastAIMessageWithFragment = messages.findLast(
@@ -54,6 +59,7 @@ export const MessagesContainer = ({
               onFragmentClick={() => setActiveFragment(message.fragment)}
             />
           ))}
+          {isUserLastMessage && <MessageLoading />}
           <div ref={bottomRef} />
         </div>
       </div>
