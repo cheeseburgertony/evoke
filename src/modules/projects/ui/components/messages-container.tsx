@@ -20,6 +20,7 @@ export const MessagesContainer = ({
   setActiveFragment,
 }: IMessagesContainerProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const lastAIMessageIdRef = useRef<string | null>(null);
 
   const trpc = useTRPC();
   const { data: messages } = useSuspenseQuery(
@@ -30,15 +31,18 @@ export const MessagesContainer = ({
   const lastMessage = messages[messages.length - 1];
   const isUserLastMessage = lastMessage?.role === "USER";
 
-  // TODO: 有新消息时自动刷新并选中最后一个fragment
-  // useEffect(() => {
-  //   const lastAIMessageWithFragment = messages.findLast(
-  //     (message) => message.role === "ASSISTANT" && !!message.fragment
-  //   );
-  //   if (lastAIMessageWithFragment) {
-  //     setActiveFragment(lastAIMessageWithFragment.fragment);
-  //   }
-  // }, [messages, setActiveFragment]);
+  useEffect(() => {
+    const lastAIMessageWithFragment = messages.findLast(
+      (message) => message.role === "ASSISTANT" && !!message.fragment
+    );
+    if (
+      lastAIMessageWithFragment &&
+      lastAIMessageWithFragment.id !== lastAIMessageIdRef.current
+    ) {
+      setActiveFragment(lastAIMessageWithFragment.fragment);
+      lastAIMessageIdRef.current = lastAIMessageWithFragment.id;
+    }
+  }, [messages, setActiveFragment]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView();
