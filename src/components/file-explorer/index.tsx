@@ -53,8 +53,8 @@ export const FileExplorer = ({ files }: IFileExplorerProps) => {
   const handleCopy = useCallback(async () => {
     if (selectedFile) {
       try {
-        navigator.clipboard.writeText(files[selectedFile]);
-        await setCopied(true);
+        await navigator.clipboard.writeText(files[selectedFile]);
+        setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
         console.error("复制错误: ", err);
