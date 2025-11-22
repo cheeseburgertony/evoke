@@ -50,11 +50,11 @@ export const FileExplorer = ({ files }: IFileExplorerProps) => {
     [files]
   );
 
-  const handleCopy = useCallback(() => {
+  const handleCopy = useCallback(async () => {
     if (selectedFile) {
       try {
         navigator.clipboard.writeText(files[selectedFile]);
-        setCopied(true);
+        await setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
         console.error("复制错误: ", err);
