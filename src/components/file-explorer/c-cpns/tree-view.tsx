@@ -1,3 +1,5 @@
+'use client';
+
 import { ChevronRightIcon, FileIcon, FolderIcon } from "lucide-react";
 import {
   Collapsible,
