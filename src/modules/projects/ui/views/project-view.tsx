@@ -1,20 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import { Suspense, useState } from "react";
+import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
+import type { Fragment } from "@/generated/prisma/client";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { Fragment } from "@/generated/prisma/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { FileExplorer } from "@/components/file-explorer";
 import { MessagesContainer } from "../components/messages-container";
 import { ProjectHeader } from "../components/project-header";
 import { FragmentWeb } from "../components/fragment-web";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { CodeView } from "@/components/code-view";
 
 interface IProjectViewProps {
   projectId: string;
@@ -74,8 +74,12 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
             <TabsContent value="preview">
               {!!activeFragment && <FragmentWeb data={activeFragment} />}
             </TabsContent>
-            <TabsContent value="code">
-              <CodeView lang="ts" code="const a = 'Hello World'"/>
+            <TabsContent value="code" className="min-h-0">
+              {!!activeFragment && (
+                <FileExplorer
+                  files={activeFragment.files as { [path: string]: string }}
+                />
+              )}
             </TabsContent>
           </Tabs>
         </ResizablePanel>
