@@ -67,14 +67,16 @@ const Tree = ({ item, selectedValue, onSelect, parentPath }: ITreeProps) => {
     const isSelected = selectedValue === currentPath;
 
     return (
-      <SidebarMenuButton
-        isActive={isSelected}
-        className="data-[active=true]:bg-transparent data-[active=true]:font-semibold"
-        onClick={() => onSelect?.(currentPath)}
-      >
-        <FileIcon />
-        <span className="truncate">{name}</span>
-      </SidebarMenuButton>
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          isActive={isSelected}
+          className="data-[active=true]:bg-transparent data-[active=true]:font-semibold"
+          onClick={() => onSelect?.(currentPath)}
+        >
+          <FileIcon />
+          <span className="truncate">{name}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
     );
   }
 
