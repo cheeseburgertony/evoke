@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import { Suspense, useState } from "react";
 import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
 import type { Fragment } from "@/generated/prisma/client";
@@ -24,6 +25,8 @@ interface IProjectViewProps {
 export const ProjectView = ({ projectId }: IProjectViewProps) => {
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabState, setTabState] = useState<"preview" | "code">("preview");
+  const { has } = useAuth();
+  const hasProAccess = has?.({ plan: "pro" });
 
   return (
     <div className="h-screen">
@@ -64,12 +67,14 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
                 </TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-x-2">
-                <Button size="sm" variant="tertiary" asChild>
-                  <Link href="/pricing">
-                    <CrownIcon />
-                    升级
-                  </Link>
-                </Button>
+                {!hasProAccess && (
+                  <Button size="sm" variant="tertiary" asChild>
+                    <Link href="/pricing">
+                      <CrownIcon />
+                      升级
+                    </Link>
+                  </Button>
+                )}
                 <UserControl />
               </div>
             </div>

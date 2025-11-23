@@ -42,15 +42,17 @@ export const ProjectForm = () => {
       onSuccess: (data) => {
         // 标记数据为过期，触发重新获取
         queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
+        queryClient.invalidateQueries(trpc.usage.status.queryOptions());
         router.push(`/projects/${data.id}`);
-        // TODO: 失效状态
       },
       onError: (error) => {
         toast.error(error.message);
         if (error.data?.code === "UNAUTHORIZED") {
           clerk.openSignIn();
         }
-        // TODO: 重定向到付费页面或者进行特定处理
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          router.push("/pricing");
+        }
       },
     })
   );
