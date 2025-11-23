@@ -4,6 +4,8 @@ import {
   createTool,
   createNetwork,
   Tool,
+  type Message,
+  createState,
 } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import { z } from "zod";
@@ -28,6 +30,37 @@ export const codeAgentFunction = inngest.createFunction(
       const sandbox = await Sandbox.create("evoke-nextjs-test-1");
       return sandbox.sandboxId;
     });
+
+    // 获取之前记录
+    const previousMessages = await step.run(
+      "get-previous-messages",
+      async () => {
+        const formattedMessages: Message[] = [];
+
+        const messages = await prisma.message.findMany({
+          where: { projectId: event.data.projectId },
+          orderBy: { createdAt: "desc" },
+        });
+
+        for (const message of messages) {
+          formattedMessages.push({
+            type: "text",
+            role: message.role === "ASSISTANT" ? "assistant" : "user",
+            content: message.content,
+          });
+        }
+
+        return formattedMessages;
+      }
+    );
+
+    const state = createState<AgentState>(
+      {
+        summary: "",
+        files: {},
+      },
+      { messages: previousMessages }
+    );
 
     // codeAgent生成代码
     const codeAgent = createAgent<AgentState>({
@@ -166,6 +199,7 @@ export const codeAgentFunction = inngest.createFunction(
       agents: [codeAgent],
       // 最大迭代次数，防止无限循环
       maxIter: 15,
+      defaultState: state,
       router: async ({ network }) => {
         const summary = network.state.data.summary;
 
@@ -180,7 +214,7 @@ export const codeAgentFunction = inngest.createFunction(
     });
 
     // 让网络自动调用agent完成任务
-    const result = await network.run(event.data.value);
+    const result = await network.run(event.data.value, { state });
 
     const isError =
       !result.state.data.summary ||
