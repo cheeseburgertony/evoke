@@ -25,7 +25,7 @@ export const MessagesContainer = ({
   const trpc = useTRPC();
   const { data: messages } = useSuspenseQuery(
     // TODO: 进行实时的消息更新
-    trpc.messages.getMany.queryOptions({ projectId }, { refetchInterval: 5000 })
+    trpc.messages.getMany.queryOptions({ projectId }, { refetchInterval: 2000 })
   );
 
   const lastMessage = messages[messages.length - 1];
