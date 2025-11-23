@@ -9,9 +9,13 @@ import {
 } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import { z } from "zod";
-import { PROMPT } from "@/prompt";
+import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "@/prompt";
 import { inngest } from "./client";
-import { getSandbox, lastAIMessageTextContent } from "./utils";
+import {
+  getSandbox,
+  lastAIMessageTextContent,
+  parseAgentOutput,
+} from "./utils";
 import prisma from "@/lib/prisma";
 
 interface AgentState {
@@ -39,7 +43,7 @@ export const codeAgentFunction = inngest.createFunction(
 
         const messages = await prisma.message.findMany({
           where: { projectId: event.data.projectId },
-          orderBy: { createdAt: "desc" },
+          orderBy: { createdAt: "asc" },
         });
 
         for (const message of messages) {
@@ -216,6 +220,35 @@ export const codeAgentFunction = inngest.createFunction(
     // 让网络自动调用agent完成任务
     const result = await network.run(event.data.value, { state });
 
+    const fragmentTitleGenerator = createAgent<AgentState>({
+      name: "fragment-title-generator",
+      description: "A fragment title generator",
+      system: FRAGMENT_TITLE_PROMPT,
+      model: openai({
+        model: "deepseek-chat",
+        baseUrl: process.env.DEEPSEEK_BASE_URL,
+        apiKey: process.env.DEEPSEEK_API_KEY,
+      }),
+    });
+
+    const responseGenerator = createAgent<AgentState>({
+      name: "response-generator",
+      description: "A response title generator",
+      system: RESPONSE_PROMPT,
+      model: openai({
+        model: "deepseek-chat",
+        baseUrl: process.env.DEEPSEEK_BASE_URL,
+        apiKey: process.env.DEEPSEEK_API_KEY,
+      }),
+    });
+
+    const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(
+      result.state.data.summary
+    );
+    const { output: responseOutput } = await responseGenerator.run(
+      result.state.data.summary
+    );
+
     const isError =
       !result.state.data.summary ||
       Object.keys(result.state.data.files || {}).length === 0;
@@ -243,13 +276,13 @@ export const codeAgentFunction = inngest.createFunction(
       return await prisma.message.create({
         data: {
           projectId: event.data.projectId,
-          content: result.state.data.summary,
+          content: parseAgentOutput(responseOutput),
           role: "ASSISTANT",
           type: "RESULT",
           fragment: {
             create: {
               sandboxUrl,
-              title: "Fragment",
+              title: parseAgentOutput(fragmentTitleOutput),
               files: result.state.data.files,
             },
           },
