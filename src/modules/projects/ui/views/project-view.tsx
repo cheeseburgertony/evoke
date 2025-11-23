@@ -37,13 +37,13 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
           minSize={20}
           className="flex flex-col min-h-0"
         >
-          <ErrorBoundary fallback={<div>Project header error</div>}>
-            <Suspense fallback={<div>Loading project...</div>}>
+          <ErrorBoundary fallback={<div>项目信息加载错误</div>}>
+            <Suspense fallback={<div>项目信息加载中...</div>}>
               <ProjectHeader projectId={projectId} />
             </Suspense>
           </ErrorBoundary>
-          <ErrorBoundary fallback={<div>Messages container error</div>}>
-            <Suspense fallback={<div>Loading messages...</div>}>
+          <ErrorBoundary fallback={<div>对话窗口加载错误</div>}>
+            <Suspense fallback={<div>对话窗口加载中...</div>}>
               <MessagesContainer
                 projectId={projectId}
                 activeFragment={activeFragment}
@@ -88,9 +88,9 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
             </TabsContent>
             <TabsContent value="code" className="min-h-0">
               {!!activeFragment && (
-                <FileExplorer
-                  files={activeFragment.files as { [path: string]: string }}
-                />
+                  <FileExplorer
+                    files={activeFragment.files as { [path: string]: string }}
+                  />
               )}
             </TabsContent>
           </Tabs>
