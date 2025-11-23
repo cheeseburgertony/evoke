@@ -43,7 +43,8 @@ export const codeAgentFunction = inngest.createFunction(
 
         const messages = await prisma.message.findMany({
           where: { projectId: event.data.projectId },
-          orderBy: { createdAt: "asc" },
+          orderBy: { createdAt: "desc" },
+          take: 5,
         });
 
         for (const message of messages) {
@@ -54,7 +55,7 @@ export const codeAgentFunction = inngest.createFunction(
           });
         }
 
-        return formattedMessages;
+        return formattedMessages.reverse();
       }
     );
 
