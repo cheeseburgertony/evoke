@@ -292,7 +292,7 @@ export const codeAgentFunction = inngest.createFunction(
 
     return {
       url: sandboxUrl,
-      title: "Fragment",
+      title: parseAgentOutput(fragmentTitleOutput),
       files: result.state.data.files,
       summary: result.state.data.summary,
     };
