@@ -19,9 +19,14 @@ export const Usage = ({ points, msBeforeNext }: IUsageProps) => {
   const hasProAccess = has?.({ plan: "pro" });
 
   const resetTime = useMemo(() => {
-    return formatDistanceToNow(new Date(now + msBeforeNext), {
-      locale: zhCN,
-    });
+    try {
+      return formatDistanceToNow(new Date(now + msBeforeNext), {
+        locale: zhCN,
+      });
+    } catch (error) {
+      console.error("Error formatting reset time:", error);
+      return "未知时间";
+    }
   }, [now, msBeforeNext]);
 
   return (
