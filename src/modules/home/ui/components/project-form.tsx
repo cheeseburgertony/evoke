@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useClerk } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +26,7 @@ const formSchema = z.object({
 export const ProjectForm = () => {
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
+  const clerk = useClerk();
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -44,8 +46,11 @@ export const ProjectForm = () => {
         // TODO: 失效状态
       },
       onError: (error) => {
-        // TODO: 重定向到付费页面或者进行特定处理
         toast.error(error.message);
+        if (error.data?.code === "UNAUTHORIZED") {
+          clerk.openSignIn();
+        }
+        // TODO: 重定向到付费页面或者进行特定处理
       },
     })
   );
