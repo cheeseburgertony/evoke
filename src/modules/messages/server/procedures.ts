@@ -50,7 +50,7 @@ export const messagesRouter = createTRPCRouter({
       if (!existingProject) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "没有找到对应的项目",
+          message: "Project not found",
         });
       }
 
