@@ -4,14 +4,16 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextareaAutoSize from "react-textarea-autosize";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Usage } from "@/components/usage";
 
 interface IMessageFormProps {
   projectId: string;
@@ -26,10 +28,13 @@ const formSchema = z.object({
 
 export const MessageForm = ({ projectId }: IMessageFormProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const showUsage = false;
+  const router = useRouter();
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+
+  const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,17 +50,21 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
         queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId })
         );
-        // TODO: 失效状态
+        queryClient.invalidateQueries(trpc.usage.status.queryOptions());
       },
       onError: (error) => {
-        // TODO: 重定向到付费页面或者进行特定处理
         toast.error(error.message);
+        
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          router.push("/pricing");
+        }
       },
     })
   );
 
   const isPending = createMessage.isPending;
   const isButtonDisabled = isPending || !form.formState.isValid;
+  const showUsage = !!usage;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await createMessage.mutateAsync({
@@ -66,6 +75,12 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
 
   return (
     <Form {...form}>
+      {showUsage && (
+        <Usage
+          points={usage.remainingPoints}
+          msBeforeNext={usage.msBeforeNext}
+        />
+      )}
       <form
         className={cn(
           "relative border p-4 pt-1 rounded-xl bg-sidebar dark:bg-sidebar transition-all",
