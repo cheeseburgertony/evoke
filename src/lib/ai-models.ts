@@ -64,7 +64,7 @@ export const aiModels: ModelConfig[] = [
     pro: true,
   },
   {
-    id:"qwen3-max",
+    id: "qwen3-max",
     name: "Qwen 3 Max",
     description: "Qwen 3 系列最大模型",
     icon: "🦾",

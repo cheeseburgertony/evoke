@@ -15,6 +15,8 @@ import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PROJECT_TEMPLATES } from "../../constants";
+import { ModelSelector } from "@/components/model-selector";
+import { useModelSelection } from "@/hooks/use-model-selection";
 
 const formSchema = z.object({
   value: z
@@ -25,6 +27,7 @@ const formSchema = z.object({
 
 export const ProjectForm = () => {
   const [isFocused, setIsFocused] = useState(false);
+  const { selectedModelId, setSelectedModelId } = useModelSelection();
   const router = useRouter();
   const clerk = useClerk();
 
@@ -63,6 +66,7 @@ export const ProjectForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await createProject.mutateAsync({
       value: values.value,
+      modelId: selectedModelId,
     });
   };
 
@@ -114,18 +118,25 @@ export const ProjectForm = () => {
               </kbd>
               &nbsp;发送
             </div>
-            <Button
-              className={cn("size-8 rounded-full", {
-                "bg-muted-foreground border": isButtonDisabled,
-              })}
-              disabled={isButtonDisabled}
-            >
-              {isPending ? (
-                <Loader2Icon className="size-4 animate-spin" />
-              ) : (
-                <ArrowUpIcon />
-              )}
-            </Button>
+            <div className="flex justify-between items-center gap-x-4">
+              <ModelSelector
+                className="size-8 rounded-full"
+                value={selectedModelId}
+                onChange={setSelectedModelId}
+              />
+              <Button
+                className={cn("size-8 rounded-full", {
+                  "bg-muted-foreground border": isButtonDisabled,
+                })}
+                disabled={isButtonDisabled}
+              >
+                {isPending ? (
+                  <Loader2Icon className="size-4 animate-spin" />
+                ) : (
+                  <ArrowUpIcon />
+                )}
+              </Button>
+            </div>
           </div>
         </form>
 
