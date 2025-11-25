@@ -14,6 +14,7 @@ export interface ModelConfig {
   description: string;
   icon: string;
   pro?: boolean;
+  hidden?: boolean;
   provider:
     | "openai"
     | "deepseek"
@@ -46,6 +47,14 @@ export const aiModels: ModelConfig[] = [
     description: "美团大模型",
     icon: "🐱",
     provider: "longcat",
+  },
+  {
+    id: "deepseek-ai/DeepSeek-V3.1",
+    name: "DeepSeek V3.1",
+    description: "通用能力强，适合多种任务",
+    icon: "🌊",
+    provider: "modelscope",
+    hidden: true,
   },
   // {
   //   id: "gpt-4.1",
