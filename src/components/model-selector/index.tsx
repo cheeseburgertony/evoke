@@ -37,7 +37,6 @@ export function ModelSelector({
   const hasProAccess = has?.({ plan: "pro" });
 
   const handleSelectModel = (model: ModelConfig) => {
-    console.log(model);
     setSelectedModel(model);
     onChange(model.id);
   };
