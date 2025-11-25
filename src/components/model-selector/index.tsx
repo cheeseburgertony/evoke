@@ -37,12 +37,16 @@ export default function ModelSelector({
   const hasProAccess = has?.({ plan: "pro" });
 
   useEffect(() => {
-    const model = aiModels.find((m) => m.id === value);
-    if (model && model.id !== selectedModel.id) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedModel(model);
+    let model = aiModels.find((m) => m.id === value) || aiModels[0];
+    if (!hasProAccess && model.pro) {
+      model = aiModels.find((m) => !m.pro) || aiModels[0];
+      if (model.id !== value) {
+        onChange(model.id);
+      }
     }
-  }, [value, selectedModel.id]);
+    setSelectedModel(model);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, hasProAccess]);
 
   const handleSelectModel = (model: ModelConfig) => {
     setSelectedModel(model);
@@ -50,7 +54,7 @@ export default function ModelSelector({
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className={cn("gap-2", className)}>
           <Hint text="模型">
