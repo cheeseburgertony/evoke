@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,10 +10,12 @@ import TextareaAutoSize from "react-textarea-autosize";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { Form, FormField } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Usage } from "@/components/usage";
+import { Button } from "@/components/ui/button";
+import { Form, FormField } from "@/components/ui/form";
+import { ModelSelector } from "@/components/model-selector";
+import { cn } from "@/lib/utils";
+import { type AIModelIdType, aiModels } from "@/lib/ai-models";
 
 interface IMessageFormProps {
   projectId: string;
@@ -28,12 +30,26 @@ const formSchema = z.object({
 
 export const MessageForm = ({ projectId }: IMessageFormProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const router = useRouter();
+  const [selectedModelId, setSelectedModelId] = useState<AIModelIdType>(() => {
+    if (typeof window !== "undefined") {
+      return (
+        (localStorage.getItem("ai-model") as AIModelIdType) || aiModels[0].id
+      );
+    }
+    return aiModels[0].id;
+  });
 
+  const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ai-model", selectedModelId);
+    }
+  }, [selectedModelId]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,7 +70,7 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
       },
       onError: (error) => {
         toast.error(error.message);
-        
+
         if (error.data?.code === "TOO_MANY_REQUESTS") {
           router.push("/pricing");
         }
@@ -70,6 +86,7 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
     await createMessage.mutateAsync({
       value: values.value,
       projectId,
+      modelId: selectedModelId,
     });
   };
 
@@ -119,18 +136,25 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
             </kbd>
             &nbsp;发送
           </div>
-          <Button
-            className={cn("size-8 rounded-full", {
-              "bg-muted-foreground border": isButtonDisabled,
-            })}
-            disabled={isButtonDisabled}
-          >
-            {isPending ? (
-              <Loader2Icon className="size-4 animate-spin" />
-            ) : (
-              <ArrowUpIcon />
-            )}
-          </Button>
+          <div className="flex justify-between items-center gap-x-4">
+            <ModelSelector
+              className="size-8 rounded-full"
+              value={selectedModelId}
+              onChange={setSelectedModelId}
+            />
+            <Button
+              className={cn("size-8 rounded-full", {
+                "bg-muted-foreground border": isButtonDisabled,
+              })}
+              disabled={isButtonDisabled}
+            >
+              {isPending ? (
+                <Loader2Icon className="size-4 animate-spin" />
+              ) : (
+                <ArrowUpIcon />
+              )}
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

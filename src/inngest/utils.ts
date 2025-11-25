@@ -1,6 +1,13 @@
 import { Sandbox } from "@e2b/code-interpreter";
-import type { AgentResult, Message, TextMessage } from "@inngest/agent-kit";
+import {
+  gemini,
+  openai,
+  type AgentResult,
+  type Message,
+  type TextMessage,
+} from "@inngest/agent-kit";
 import { SANDBOX_TIMEOUT } from "./constants";
+import { aiModels, type AIModelIdType } from "@/lib/ai-models";
 
 export async function getSandbox(sandboxId: string) {
   const sandbox = await Sandbox.connect(sandboxId);
@@ -45,4 +52,75 @@ export const parseAgentOutput = (outputMessages: Message[]) => {
   }
 
   return output.content;
+};
+
+/**
+ * 创建模型实例
+ * @param modelId 模型ID
+ * @param temperature 温度参数
+ * @returns 模型实例
+ */
+export const createModelInstance = (
+  modelId: AIModelIdType,
+  temperature = 0.1
+) => {
+  const model = aiModels.find((model) => model.id === modelId);
+
+  switch (model?.provider) {
+    case "open-router":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.OPEN_ROUTER_BASE_URL,
+        apiKey: process.env.OPEN_ROUTER_API_KEY,
+        defaultParameters: { temperature },
+      });
+
+    case "modelscope":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.MODELSCOPE_BASE_URL,
+        apiKey: process.env.MODELSCOPE_API_KEY,
+        defaultParameters: { temperature },
+      });
+
+    case "longcat":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.LONG_CAT_BASE_URL,
+        apiKey: process.env.LONG_CAT_API_KEY,
+        defaultParameters: { temperature },
+      });
+
+    case "deepseek":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.DEEPSEEK_BASE_URL,
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        defaultParameters: { temperature },
+      });
+
+    case "qwen":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.QWEN_BASE_URL,
+        apiKey: process.env.QWEN_API_KEY,
+        defaultParameters: { temperature },
+      });
+
+    case "gemini":
+      return gemini({
+        model: model.id,
+        defaultParameters: {
+          generationConfig: { temperature },
+        },
+      });
+
+    default:
+      return openai({
+        model: "deepseek-chat",
+        baseUrl: process.env.DEEPSEEK_BASE_URL,
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        defaultParameters: { temperature },
+      });
+  }
 };
