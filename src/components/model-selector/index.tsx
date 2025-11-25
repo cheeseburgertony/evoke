@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +25,7 @@ interface ModelSelectorProps {
   className?: string;
 }
 
-export function ModelSelector({
+export default function ModelSelector({
   value,
   onChange,
   className,
@@ -35,6 +35,14 @@ export function ModelSelector({
   });
   const { has } = useAuth();
   const hasProAccess = has?.({ plan: "pro" });
+
+  useEffect(() => {
+    const model = aiModels.find((m) => m.id === value);
+    if (model && model.id !== selectedModel.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedModel(model);
+    }
+  }, [value, selectedModel.id]);
 
   const handleSelectModel = (model: ModelConfig) => {
     setSelectedModel(model);

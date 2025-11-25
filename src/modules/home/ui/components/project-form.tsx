@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useClerk } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -15,8 +16,12 @@ import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PROJECT_TEMPLATES } from "../../constants";
-import { ModelSelector } from "@/components/model-selector";
 import { useModelSelection } from "@/hooks/use-model-selection";
+
+const ModelSelector = dynamic(
+  () => import("@/components/model-selector"),
+  { ssr: false }
+);
 
 const formSchema = z.object({
   value: z
