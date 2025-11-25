@@ -66,24 +66,26 @@ export default function ModelSelector({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-66" align="end">
         <DropdownMenuGroup>
-          {aiModels.map((model) => (
-            <DropdownMenuItem
-              key={model.id}
-              onClick={() => handleSelectModel(model)}
-              className="cursor-pointer"
-              disabled={model.pro && !hasProAccess}
-            >
-              <div className="flex items-center justify-between w-full gap-2">
-                <div className="flex items-center gap-2 flex-1">
-                  <span className="text-lg">{model.icon}</span>
-                  <span className="font-medium">{model.name}</span>
+          {aiModels
+            .filter((model) => !model.hidden)
+            .map((model) => (
+              <DropdownMenuItem
+                key={model.id}
+                onClick={() => handleSelectModel(model)}
+                className="cursor-pointer"
+                disabled={model.pro && !hasProAccess}
+              >
+                <div className="flex items-center justify-between w-full gap-2">
+                  <div className="flex items-center gap-2 flex-1">
+                    <span className="text-lg">{model.icon}</span>
+                    <span className="font-medium">{model.name}</span>
+                  </div>
+                  {selectedModel.id === model.id && (
+                    <Check className="h-4 w-4 text-primary" />
+                  )}
                 </div>
-                {selectedModel.id === model.id && (
-                  <Check className="h-4 w-4 text-primary" />
-                )}
-              </div>
-            </DropdownMenuItem>
-          ))}
+              </DropdownMenuItem>
+            ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
