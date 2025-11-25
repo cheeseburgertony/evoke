@@ -1,1 +1,1 @@
-export const SANDBOX_TIMEOUT = 60_000 * 10;
+export const SANDBOX_TIMEOUT = 60_000 * 5;
