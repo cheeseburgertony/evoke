@@ -1,5 +1,4 @@
 import {
-  openai,
   createAgent,
   createTool,
   createNetwork,
@@ -12,6 +11,7 @@ import { z } from "zod";
 import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "@/prompt";
 import { inngest } from "./client";
 import {
+  createModelInstance,
   getSandbox,
   lastAIMessageTextContent,
   parseAgentOutput,
@@ -72,14 +72,7 @@ export const codeAgentFunction = inngest.createFunction(
       name: "code-agent",
       description: "An expert coding agent",
       system: PROMPT,
-      model: openai({
-        model: "deepseek-chat",
-        baseUrl: process.env.DEEPSEEK_BASE_URL,
-        apiKey: process.env.DEEPSEEK_API_KEY,
-        defaultParameters: {
-          temperature: 0.1,
-        },
-      }),
+      model: createModelInstance(event.data.modelId || "deepseek-chat"),
       tools: [
         // 终端工具，允许在沙盒中运行命令
         createTool({
@@ -225,22 +218,14 @@ export const codeAgentFunction = inngest.createFunction(
       name: "fragment-title-generator",
       description: "A fragment title generator",
       system: FRAGMENT_TITLE_PROMPT,
-      model: openai({
-        model: "deepseek-chat",
-        baseUrl: process.env.DEEPSEEK_BASE_URL,
-        apiKey: process.env.DEEPSEEK_API_KEY,
-      }),
+      model: createModelInstance("deepseek-ai/DeepSeek-V3.1"),
     });
 
     const responseGenerator = createAgent<AgentState>({
       name: "response-generator",
       description: "A response title generator",
       system: RESPONSE_PROMPT,
-      model: openai({
-        model: "deepseek-chat",
-        baseUrl: process.env.DEEPSEEK_BASE_URL,
-        apiKey: process.env.DEEPSEEK_API_KEY,
-      }),
+      model: createModelInstance("deepseek-ai/DeepSeek-V3.1"),
     });
 
     const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(
