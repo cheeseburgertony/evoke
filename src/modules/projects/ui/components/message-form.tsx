@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,9 +14,13 @@ import { useTRPC } from "@/trpc/client";
 import { Usage } from "@/components/usage";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
-import { ModelSelector } from "@/components/model-selector";
 import { cn } from "@/lib/utils";
 import { useModelSelection } from "@/hooks/use-model-selection";
+
+const ModelSelector = dynamic(
+  () => import("@/components/model-selector"),
+  { ssr: false }
+);
 
 interface IMessageFormProps {
   projectId: string;
