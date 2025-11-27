@@ -218,14 +218,14 @@ export const codeAgentFunction = inngest.createFunction(
       name: "fragment-title-generator",
       description: "A fragment title generator",
       system: FRAGMENT_TITLE_PROMPT,
-      model: createModelInstance("deepseek-ai/DeepSeek-V3.1"),
+      model: createModelInstance("LongCat-Flash-Chat"),
     });
 
     const responseGenerator = createAgent<AgentState>({
       name: "response-generator",
       description: "A response title generator",
       system: RESPONSE_PROMPT,
-      model: createModelInstance("deepseek-ai/DeepSeek-V3.1"),
+      model: createModelInstance("LongCat-Flash-Chat"),
     });
 
     const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(
