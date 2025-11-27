@@ -1,101 +1,50 @@
-// export const PROJECT_TEMPLATES = [
-//   {
-//     emoji: "🎬",
-//     title: "Build a Netflix clone",
-//     prompt:
-//       "Build a Netflix-style homepage with a hero banner (use a nice, dark-mode compatible gradient here), movie sections, responsive cards, and a modal for viewing details using mock data and local state. Use dark mode.",
-//   },
-//   {
-//     emoji: "📦",
-//     title: "Build an admin dashboard",
-//     prompt:
-//       "Create an admin dashboard with a sidebar, stat cards, a chart placeholder, and a basic table with filter and pagination using local state. Use clear visual grouping and balance in your design for a modern, professional look.",
-//   },
-//   {
-//     emoji: "📋",
-//     title: "Build a kanban board",
-//     prompt:
-//       "Build a kanban board with drag-and-drop using react-beautiful-dnd and support for adding and removing tasks with local state. Use consistent spacing, column widths, and hover effects for a polished UI.",
-//   },
-//   {
-//     emoji: "🗂️",
-//     title: "Build a file manager",
-//     prompt:
-//       "Build a file manager with folder list, file grid, and options to rename or delete items using mock data and local state. Focus on spacing, clear icons, and visual distinction between folders and files.",
-//   },
-//   {
-//     emoji: "📺",
-//     title: "Build a YouTube clone",
-//     prompt:
-//       "Build a YouTube-style homepage with mock video thumbnails, a category sidebar, and a modal preview with title and description using local state. Ensure clean alignment and a well-organized grid layout.",
-//   },
-//   {
-//     emoji: "🛍️",
-//     title: "Build a store page",
-//     prompt:
-//       "Build a store page with category filters, a product grid, and local cart logic to add and remove items. Focus on clear typography, spacing, and button states for a great e-commerce UI.",
-//   },
-//   {
-//     emoji: "🏡",
-//     title: "Build an Airbnb clone",
-//     prompt:
-//       "Build an Airbnb-style listings grid with mock data, filter sidebar, and a modal with property details using local state. Use card spacing, soft shadows, and clean layout for a welcoming design.",
-//   },
-//   {
-//     emoji: "🎵",
-//     title: "Build a Spotify clone",
-//     prompt:
-//       "Build a Spotify-style music player with a sidebar for playlists, a main area for song details, and playback controls. Use local state for managing playback and song selection. Prioritize layout balance and intuitive control placement for a smooth user experience. Use dark mode.",
-//   },
-// ] as const;
-
 export const PROJECT_TEMPLATES = [
   {
-    emoji: "🎬",
-    title: "构建 Netflix 克隆",
+    emoji: "✨",
+    title: "粒子动画登录页",
     prompt:
-      "构建一个 Netflix 风格的主页，包含英雄横幅（使用漂亮的深色模式兼容渐变）、电影分区、响应式卡片，以及使用模拟数据和本地状态查看详情的模态框。使用深色模式。",
+      "创建带有粒子动画背景的登录页面，粒子随鼠标移动产生交互效果。包含浮动卡片、渐变文字和微妙的悬停动画。实现表单输入的流畅验证和成功动效。",
   },
   {
-    emoji: "📦",
-    title: "构建管理仪表板",
+    emoji: "🎆",
+    title: "构建烟花生成器",
     prompt:
-      "创建一个管理仪表板，包含侧边栏、统计卡片、图表占位符，以及使用本地状态的基础表格（带过滤和分页功能）。使用清晰的视觉分组和平衡的设计，打造现代专业的外观。",
+      "使用 Canvas 构建全屏烟花粒子效果生成器，支持多种颜色、形状和爆炸模式的烟花。实现自动播放和鼠标交互触发，包含星空背景和渐变过渡。确保粒子动画流畅自然，添加绽放消散的完整生命周期效果。",
+  },
+  {
+    emoji: "🕰️",
+    title: "交互式时间线",
+    prompt:
+      "构建垂直交互式时间线组件，支持内容卡片、图片展示和进度指示器。添加滚动触发动画、点击展开详情和流畅的时间线导航。",
+  },
+  {
+    emoji: "📸",
+    title: "图片滤镜工作室",
+    prompt:
+      "创建实时图片滤镜应用，支持多种滤镜效果、参数调整和前后对比。添加拖拽上传、下载保存和滤镜组合功能。包含现代化的图片预览界面。",
+  },
+  {
+    emoji: "🖼️",
+    title: "构建粒子头像生成器",
+    prompt:
+      "制作一个粒子头像生成器：用户上传图片后将头像像素化为动态粒子，粒子可跟随鼠标移动、散开/聚合，并具有轻微漂浮效果。使用 Canvas 实现，页面保持简洁、视觉炫酷。",
+  },
+  {
+    emoji: "🧊",
+    title: "构建玻璃拟态仪表盘",
+    prompt:
+      "创建一个全屏玻璃拟态 Dashboard，包括毛玻璃卡片、渐变背景、统计模块和图表占位符。使用一致的圆角、阴影和透明度，打造现代高质感的玻璃 UI。",
+  },
+  {
+    emoji: "🪄",
+    title: "构建 3D 漂浮玻璃卡片",
+    prompt:
+      "构建一组带 3D 倾斜效果的玻璃拟态卡片。卡片根据鼠标移动产生轻微的 3D 旋转，带有半透明玻璃效果、柔和阴影与高光反射。卡片在静止时缓慢自动浮动（上下或轻微旋转）。整体布局简洁、空间感强、动效流畅。",
   },
   {
     emoji: "📋",
-    title: "构建看板",
+    title: "构建任务看板",
     prompt:
       "使用 react-beautiful-dnd 构建一个支持拖放的看板，支持使用本地状态添加和删除任务。使用一致的间距、列宽和悬停效果，打造精致的用户界面。",
-  },
-  {
-    emoji: "🗂️",
-    title: "构建文件管理器",
-    prompt:
-      "构建一个文件管理器，包含文件夹列表、文件网格，以及使用模拟数据和本地状态重命名或删除项目的选项。注重间距、清晰的图标以及文件夹和文件之间的视觉区分。",
-  },
-  {
-    emoji: "📺",
-    title: "构建 YouTube 克隆",
-    prompt:
-      "构建一个 YouTube 风格的主页，包含模拟视频缩略图、分类侧边栏，以及使用本地状态的带标题和描述的模态预览。确保清晰的对齐和组织良好的网格布局。",
-  },
-  {
-    emoji: "🛍️",
-    title: "构建商店页面",
-    prompt:
-      "构建一个商店页面，包含分类过滤器、产品网格，以及添加和删除商品的本地购物车逻辑。注重清晰的排版、间距和按钮状态，打造出色的电商用户界面。",
-  },
-  {
-    emoji: "🏡",
-    title: "构建 Airbnb 克隆",
-    prompt:
-      "构建一个 Airbnb 风格的房源网格，包含模拟数据、过滤侧边栏，以及使用本地状态的带房产详情的模态框。使用卡片间距、柔和阴影和简洁布局，打造温馨的设计。",
-  },
-  {
-    emoji: "🎵",
-    title: "构建 Spotify 克隆",
-    prompt:
-      "构建一个 Spotify 风格的音乐播放器，包含播放列表侧边栏、歌曲详情主区域和播放控件。使用本地状态管理播放和歌曲选择。优先考虑布局平衡和直观的控件放置，以获得流畅的用户体验。使用深色模式。",
   },
 ] as const;
