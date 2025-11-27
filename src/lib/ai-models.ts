@@ -6,7 +6,9 @@ export type AIModelIdType =
   | "gemini-2.5-pro"
   | "gpt-4.1"
   | "deepseek-ai/DeepSeek-V3.1"
-  | "qwen3-max";
+  | "qwen3-max"
+  | "qwen3-coder-plus"
+  | "ZhipuAI/GLM-4.6";
 
 export interface ModelConfig {
   id: AIModelIdType;
@@ -34,19 +36,26 @@ export const aiModels: ModelConfig[] = [
     provider: "modelscope",
   },
   {
+    id: "ZhipuAI/GLM-4.6",
+    name: "GLM-4.6",
+    description: "智谱 AI 大模型",
+    icon: "🌀",
+    provider: "modelscope",
+  },
+  {
     id: "x-ai/grok-4.1-fast:free",
     name: "Grok 4.1 Fast",
     description: "X.ai 最新模型，响应迅速",
     icon: "🚀",
     provider: "open-router",
   },
-
   {
     id: "LongCat-Flash-Chat",
     name: "LongCat Flash Chat",
     description: "美团大模型",
     icon: "🐱",
     provider: "longcat",
+    hidden: true,
   },
   {
     id: "deepseek-ai/DeepSeek-V3.1",
