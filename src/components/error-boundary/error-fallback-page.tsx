@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ChevronDownIcon,
   TriangleAlertIcon,
@@ -28,6 +28,15 @@ export const ErrorFallbackPage = ({
 }: IErrorFallbackPageProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const timeRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeRef.current) {
+        clearTimeout(timeRef.current);
+      }
+    };
+  }, []);
 
   const handleCopy = async () => {
     if (!error) return;
@@ -35,9 +44,9 @@ export const ErrorFallbackPage = ({
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error("复制错误: ", error);
+      timeRef.current = setTimeout(() => setCopied(false), 2000);
+    } catch (copyError) {
+      console.error("复制错误: ", copyError);
     }
   };
 
@@ -100,7 +109,8 @@ export const ErrorFallbackPage = ({
                     </p>
                     <button
                       onClick={handleCopy}
-                      className="text-neutral-500 transition-colors p-1.5 rounded hover:bg-neutral-200"
+                      className="text-muted-foreground transition-colors p-1.5 rounded hover:bg-muted"
+                      aria-label={copied ? "已复制" : "复制错误信息"}
                     >
                       {copied ? (
                         <CheckIcon size={14} />
