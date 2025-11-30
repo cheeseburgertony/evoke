@@ -15,13 +15,13 @@ import { useTRPC } from "@/trpc/client";
 import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { PROJECT_TEMPLATES } from "../../constants";
 import { useModelSelection } from "@/hooks/use-model-selection";
+import { useTypewriter } from "@/hooks/use-typewriter";
+import { PLACEHOLDER_TEXTS, PROJECT_TEMPLATES } from "../../constants";
 
-const ModelSelector = dynamic(
-  () => import("@/components/model-selector"),
-  { ssr: false }
-);
+const ModelSelector = dynamic(() => import("@/components/model-selector"), {
+  ssr: false,
+});
 
 const formSchema = z.object({
   value: z
@@ -35,6 +35,13 @@ export const ProjectForm = () => {
   const { selectedModelId, setSelectedModelId } = useModelSelection();
   const router = useRouter();
   const clerk = useClerk();
+
+  const { displayText } = useTypewriter({
+    texts: PLACEHOLDER_TEXTS,
+    typingSpeed: 80,
+    deletingSpeed: 40,
+    pauseTime: 2500,
+  });
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -88,8 +95,14 @@ export const ProjectForm = () => {
       <section className="space-y-6">
         <form
           className={cn(
-            "relative border p-4 pt-1 rounded-xl bg-sidebar dark:bg-sidebar transition-all",
-            { "shadow-xs": isFocused }
+            "relative p-4 pt-1 rounded-2xl transition-all duration-300",
+            "bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl",
+            "border border-white/40 dark:border-white/10",
+            "shadow-xl shadow-black/5",
+            {
+              "shadow-2xl shadow-purple-500/10 border-white/60 dark:border-white/20":
+                isFocused,
+            }
           )}
           // 通过form.handleSubmit包装onSubmit返回一个新函数并自动在其中做校验
           onSubmit={form.handleSubmit(onSubmit)}
@@ -98,22 +111,29 @@ export const ProjectForm = () => {
             control={form.control}
             name="value"
             render={({ field }) => (
-              <TextareaAutoSize
-                {...field}
-                disabled={isPending}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                minRows={2}
-                maxRows={8}
-                className="pt-4 resize-none border-none w-full outline-none bg-transparent"
-                placeholder="给 Evoke 发送消息，创建一个......的项目吧"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-                    e.preventDefault();
-                    form.handleSubmit(onSubmit)(e);
-                  }
-                }}
-              />
+              <div className="relative">
+                {/* 打字机 placeholder */}
+                {!field.value && (
+                  <div className="absolute top-4 left-0 pointer-events-none text-muted-foreground">
+                    给 Evoke 发送消息，{displayText}
+                  </div>
+                )}
+                <TextareaAutoSize
+                  {...field}
+                  disabled={isPending}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  minRows={2}
+                  maxRows={8}
+                  className="pt-4 resize-none border-none w-full outline-none bg-transparent"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                      e.preventDefault();
+                      form.handleSubmit(onSubmit)(e);
+                    }
+                  }}
+                />
+              </div>
             )}
           />
           <div className="flex gap-x-2 items-end justify-between pt-2">
@@ -152,7 +172,7 @@ export const ProjectForm = () => {
               key={template.title}
               variant="outline"
               size="sm"
-              className="bg-white dark:bg-sidebar"
+              className="bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg border-white/40 dark:border-white/10 hover:bg-white/70 dark:hover:bg-slate-800/60 hover:border-white/60 dark:hover:border-white/20 transition-all duration-200 shadow-sm"
               onClick={() => onSelectTemplate(template.prompt)}
             >
               {template.emoji} {template.title}
