@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import { Suspense, useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
 import type { Fragment } from "@/generated/prisma/client";
 import {
@@ -13,8 +12,13 @@ import {
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { FileExplorer } from "@/components/file-explorer";
+import {
+  MessagesContainerSkeleton,
+  ProjectHeaderSkeleton,
+} from "@/components/skeleton";
 import { UserControl } from "@/components/user-control";
+import { FileExplorer } from "@/components/file-explorer";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { MessagesContainer } from "../components/messages-container";
 import { ProjectHeader } from "../components/project-header";
 import { FragmentWeb } from "../components/fragment-web";
@@ -37,13 +41,13 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
           minSize={20}
           className="flex flex-col min-h-0"
         >
-          <ErrorBoundary fallback={<div>项目信息加载错误</div>}>
-            <Suspense fallback={<div>项目信息加载中...</div>}>
+          <ErrorBoundary>
+            <Suspense fallback={<ProjectHeaderSkeleton />}>
               <ProjectHeader projectId={projectId} />
             </Suspense>
           </ErrorBoundary>
-          <ErrorBoundary fallback={<div>对话窗口加载错误</div>}>
-            <Suspense fallback={<div>对话窗口加载中...</div>}>
+          <ErrorBoundary>
+            <Suspense fallback={<MessagesContainerSkeleton />}>
               <MessagesContainer
                 projectId={projectId}
                 activeFragment={activeFragment}
@@ -88,9 +92,9 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
             </TabsContent>
             <TabsContent value="code" className="min-h-0">
               {!!activeFragment && (
-                  <FileExplorer
-                    files={activeFragment.files as { [path: string]: string }}
-                  />
+                <FileExplorer
+                  files={activeFragment.files as { [path: string]: string }}
+                />
               )}
             </TabsContent>
           </Tabs>
