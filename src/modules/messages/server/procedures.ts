@@ -28,6 +28,13 @@ export const messagesRouter = createTRPCRouter({
         },
       });
 
+      if (messages.length === 0) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Messages not found",
+        });
+      }
+
       return messages;
     }),
   create: protectedProcedure
