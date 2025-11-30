@@ -17,7 +17,7 @@ export const ProjectList = () => {
   if (!user) return null;
 
   return (
-    <div className="w-full bg-white dark:bg-sidebar rounded-xl p-8 border flex flex-col gap-y-6 sm:gap-y-4">
+    <div className="w-full rounded-2xl p-8 flex flex-col gap-y-6 sm:gap-y-4 bg-white/30 dark:bg-slate-900/50 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-xl shadow-black/5">
       <h2 className="text-2xl font-semibold">
         {user?.firstName || "我"}的作品
       </h2>
@@ -32,7 +32,7 @@ export const ProjectList = () => {
           <Button
             key={project.id}
             variant="outline"
-            className="font-normal h-auto justify-start w-full text-start p-4"
+            className="font-normal h-auto justify-start w-full text-start p-4 bg-white/30 dark:bg-slate-800/40 backdrop-blur-lg border-white/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-slate-700/50 hover:border-white/50 dark:hover:border-white/20 transition-all duration-200 shadow-sm"
             asChild
           >
             <Link href={`/projects/${project.id}`}>

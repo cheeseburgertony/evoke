@@ -99,8 +99,9 @@ export const ProjectForm = () => {
             "bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl",
             "border border-white/40 dark:border-white/10",
             "shadow-xl shadow-black/5",
+            "hover:shadow-2xl hover:shadow-purple-500/20 hover:border-white/60 dark:hover:border-white/20",
             {
-              "shadow-2xl shadow-purple-500/10 border-white/60 dark:border-white/20":
+              "shadow-2xl shadow-purple-500/20 border-white/60 dark:border-white/20":
                 isFocused,
             }
           )}
