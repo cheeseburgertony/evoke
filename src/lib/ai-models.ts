@@ -8,7 +8,7 @@ export type AIModelIdType =
   | "deepseek-ai/DeepSeek-V3.1"
   | "qwen3-max"
   | "qwen3-coder-plus"
-  | "ZhipuAI/GLM-4.6";
+  | "zai-org/GLM-4.6";
 
 export interface ModelConfig {
   id: AIModelIdType;
@@ -24,7 +24,8 @@ export interface ModelConfig {
     | "qwen"
     | "longcat"
     | "open-router"
-    | "modelscope";
+    | "modelscope"
+    | "silicon";
 }
 
 export const aiModels: ModelConfig[] = [
@@ -36,11 +37,11 @@ export const aiModels: ModelConfig[] = [
     provider: "modelscope",
   },
   {
-    id: "ZhipuAI/GLM-4.6",
-    name: "GLM-4.6",
+    id: "zai-org/GLM-4.6",
+    name: "GLM 4.6",
     description: "智谱 AI 大模型",
     icon: "🌀",
-    provider: "modelscope",
+    provider: "silicon",
   },
   {
     id: "x-ai/grok-4.1-fast:free",

@@ -107,6 +107,14 @@ export const createModelInstance = (
         defaultParameters: { temperature },
       });
 
+    case "silicon":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.SILICON_BASE_URL,
+        apiKey: process.env.SILICON_API_KEY,
+        defaultParameters: { temperature },
+      });
+
     case "gemini":
       return gemini({
         model: model.id,
