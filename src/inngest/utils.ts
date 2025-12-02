@@ -67,14 +67,6 @@ export const createModelInstance = (
   const model = aiModels.find((model) => model.id === modelId);
 
   switch (model?.provider) {
-    case "open-router":
-      return openai({
-        model: model.id,
-        baseUrl: process.env.OPEN_ROUTER_BASE_URL,
-        apiKey: process.env.OPEN_ROUTER_API_KEY,
-        defaultParameters: { temperature },
-      });
-
     case "modelscope":
       return openai({
         model: model.id,
@@ -99,19 +91,19 @@ export const createModelInstance = (
         defaultParameters: { temperature },
       });
 
-    case "qwen":
-      return openai({
-        model: model.id,
-        baseUrl: process.env.QWEN_BASE_URL,
-        apiKey: process.env.QWEN_API_KEY,
-        defaultParameters: { temperature },
-      });
-
     case "silicon":
       return openai({
         model: model.id,
         baseUrl: process.env.SILICON_BASE_URL,
         apiKey: process.env.SILICON_API_KEY,
+        defaultParameters: { temperature },
+      });
+
+    case "iflow":
+      return openai({
+        model: model.id,
+        baseUrl: process.env.IFLOW_BASE_URL,
+        apiKey: process.env.IFLOW_API_KEY,
         defaultParameters: { temperature },
       });
 

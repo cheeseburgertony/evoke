@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Check } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -56,9 +57,14 @@ export default function ModelSelector({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("gap-2", className)}>
-          <Hint text="模型">
-            <span className="text-lg">{selectedModel.icon}</span>
+        <Button variant="ghost" size="icon" className={cn("gap-2", className)}>
+          <Hint text={selectedModel.name}>
+            <Image
+              src={selectedModel.icon}
+              alt={selectedModel.name}
+              width={20}
+              height={20}
+            />
             {/* <span className="hidden sm:inline">{selectedModel.name}</span> */}
             {/* <ChevronDown className="h-3 w-3 opacity-50" /> */}
           </Hint>
@@ -77,7 +83,12 @@ export default function ModelSelector({
               >
                 <div className="flex items-center justify-between w-full gap-2">
                   <div className="flex items-center gap-2 flex-1">
-                    <span className="text-lg">{model.icon}</span>
+                    <Image
+                      src={model.icon}
+                      alt={model.name}
+                      width={20}
+                      height={20}
+                    />
                     <span className="font-medium">{model.name}</span>
                   </div>
                   {selectedModel.id === model.id && (
