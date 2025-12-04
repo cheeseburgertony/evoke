@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { UserControl } from "@/components/user-control";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
+
+const ToggleTheme = dynamic(() => import("./theme-toggle"), { ssr: false });
 
 export const NavBar = () => {
   const isScrolled = useScroll();
@@ -25,21 +28,24 @@ export const NavBar = () => {
           <Image src="/logo.svg" alt="Evoke" width={24} height={24} />
           <span className="font-semibold text-lg">Evoke</span>
         </Link>
-        <SignedOut>
-          <div className="flex gap-2">
-            <SignUpButton>
-              <Button variant="outline" size="sm">
-                注册
-              </Button>
-            </SignUpButton>
-            <SignInButton>
-              <Button size="sm">登录</Button>
-            </SignInButton>
-          </div>
-        </SignedOut>
-        <SignedIn>
-          <UserControl showName />
-        </SignedIn>
+        <div className="flex items-center justify-between">
+          <ToggleTheme className="mr-2" />
+          <SignedOut>
+            <div className="flex gap-2">
+              <SignUpButton>
+                <Button variant="outline" size="sm">
+                  注册
+                </Button>
+              </SignUpButton>
+              <SignInButton>
+                <Button size="sm">登录</Button>
+              </SignInButton>
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <UserControl showName />
+          </SignedIn>
+        </div>
       </div>
     </nav>
   );
