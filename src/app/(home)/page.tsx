@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ProjectForm } from "@/modules/home/ui/components/project-form";
 import { ProjectList } from "@/modules/home/ui/components/project-list";
 
-const Page = () => {
-  const t = useTranslations("HomePage");
+const Page = async () => {
+  const t = await getTranslations("HomePage");
 
   return (
     <div className="flex flex-col max-w-5xl mx-auto w-full">
