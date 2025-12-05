@@ -1,3 +1,8 @@
 {
-  "prisma.pinToPrisma6": true
+  "prisma.pinToPrisma6": true,
+  "i18n-ally.localesPaths": [
+    "messages",
+    "src/i18n",
+    "src/modules/messages"
+  ]
 }

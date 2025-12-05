@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { zhCN } from "@clerk/localizations";
+import { NextIntlClientProvider } from "next-intl";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
@@ -40,7 +41,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            <TRPCReactProvider>
+              <NextIntlClientProvider>{children}</NextIntlClientProvider>
+            </TRPCReactProvider>
             <Toaster />
           </ThemeProvider>
         </body>
