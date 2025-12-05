@@ -30,9 +30,13 @@ export const LocaleSwitcher = ({
 
   const handleChange = (value: string) => {
     const locale = value as Locale;
-    startTransition(() => {
-      setUserLocale(locale);
-      setSelectedValue(value);
+    startTransition(async () => {
+      try {
+        await setUserLocale(locale);
+        setSelectedValue(value);
+      } catch (error) {
+        console.error("Failed to update locale:", error);
+      }
     });
   };
 

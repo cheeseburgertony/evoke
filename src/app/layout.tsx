@@ -3,7 +3,8 @@ import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { enUS, zhCN } from "@clerk/localizations";
-import { NextIntlClientProvider, useLocale } from "next-intl";
+import { getLocale } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 import { type Locale } from "@/i18n/config";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
@@ -30,12 +31,12 @@ const localeMap = {
   "en-US": enUS,
 } as const;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = useLocale();
+  const locale = await getLocale();
 
   return (
     <ClerkProvider localization={localeMap[locale as Locale] ?? zhCN}>
