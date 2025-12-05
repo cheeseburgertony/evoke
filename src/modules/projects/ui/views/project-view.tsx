@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import { Suspense, useState } from "react";
+import { useTranslations } from "next-intl";
 import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
 import type { Fragment } from "@/generated/prisma/client";
 import {
@@ -28,6 +29,8 @@ interface IProjectViewProps {
 }
 
 export const ProjectView = ({ projectId }: IProjectViewProps) => {
+  const t = useTranslations("ProjectsViewsProjectView");
+
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabState, setTabState] = useState<"preview" | "code">("preview");
   const { has } = useAuth();
@@ -68,11 +71,11 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
               <TabsList className="h-8 p-0 border rounded-md">
                 <TabsTrigger className="rounded-md" value="preview">
                   <EyeIcon />
-                  <span>预览</span>
+                  <span>{t("preview")}</span>
                 </TabsTrigger>
                 <TabsTrigger className="rounded-md" value="code">
                   <CodeIcon />
-                  <span>代码</span>
+                  <span>{t("code")}</span>
                 </TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-x-2">
@@ -80,7 +83,7 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
                   <Button size="sm" variant="tertiary" asChild>
                     <Link href="/pricing">
                       <CrownIcon />
-                      升级
+                      {t("upgrade")}
                     </Link>
                   </Button>
                 )}

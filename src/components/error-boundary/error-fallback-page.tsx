@@ -9,6 +9,7 @@ import {
   CopyIcon,
   CheckIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -26,6 +27,7 @@ export const ErrorFallbackPage = ({
   error,
   resetErrorBoundary,
 }: IErrorFallbackPageProps) => {
+  const t = useTranslations("ErrorBoundaryErrorFallbackPage");
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const timeRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,10 +81,10 @@ export const ErrorFallbackPage = ({
         {/* 标题和描述 */}
         <div className="mb-8 space-y-3 text-center">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            哎呀，出了点问题
+            {t("somethingWentWrong")}
           </h1>
           <p className="mx-auto max-w-sm text-muted-foreground">
-            页面遇到了一些意外情况。
+            {t("pageEncountered")}
           </p>
         </div>
 
@@ -92,7 +94,7 @@ export const ErrorFallbackPage = ({
             <Collapsible open={isOpen} onOpenChange={setIsOpen}>
               <CollapsibleTrigger asChild>
                 <button className="group flex w-full items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
-                  <span>错误详情</span>
+                  <span>{t("errorDetails")}</span>
                   <ChevronDownIcon
                     className={cn(
                       "size-4 transition-transform duration-300",
@@ -110,7 +112,7 @@ export const ErrorFallbackPage = ({
                     <button
                       onClick={handleCopy}
                       className="text-muted-foreground transition-colors p-1.5 rounded hover:bg-muted"
-                      aria-label={copied ? "已复制" : "复制错误信息"}
+                      aria-label={copied ? t("copied") : t("copyErrorInfo")}
                     >
                       {copied ? (
                         <CheckIcon size={14} />
@@ -144,7 +146,7 @@ export const ErrorFallbackPage = ({
               className="w-full gap-2 shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 sm:flex-1"
             >
               <RefreshCwIcon className="size-4" />
-              重新加载
+              {t("reload")}
             </Button>
           )}
           <Button
@@ -154,13 +156,13 @@ export const ErrorFallbackPage = ({
             className="w-full gap-2 bg-background/50 backdrop-blur-sm transition-all hover:bg-background sm:flex-1"
           >
             <HomeIcon className="size-4" />
-            返回首页
+            {t("backToHome")}
           </Button>
         </div>
 
         {/* 底部提示 */}
         <p className="mt-8 text-center text-xs text-muted-foreground/60">
-          如果问题持续存在，请联系技术支持
+          {t("ifProblemPersists")}
         </p>
       </div>
     </div>

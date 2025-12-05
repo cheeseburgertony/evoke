@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { ChevronRightIcon, Code2Icon } from "lucide-react";
 import { Fragment } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
@@ -15,6 +16,8 @@ export const FragmentCard = ({
   isActiveFragment,
   onFragmentClick,
 }: IFragmentCardProps) => {
+  const t = useTranslations("MessageCardCCpnsFragmentCard");
+
   return (
     <button
       className={cn(
@@ -31,7 +34,7 @@ export const FragmentCard = ({
         <span className="text-sm font-medium line-clamp-1">
           {fragment.title}
         </span>
-        <span className="text-sm">预览</span>
+        <span className="text-sm">{t("preview")}</span>
       </div>
       <div className="flex justify-center items-center mt-0.5">
         <ChevronRightIcon className="size-4" />

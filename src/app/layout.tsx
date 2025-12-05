@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { zhCN } from "@clerk/localizations";
-import { NextIntlClientProvider } from "next-intl";
+import { enUS, zhCN } from "@clerk/localizations";
+import { NextIntlClientProvider, useLocale } from "next-intl";
+import { type Locale } from "@/i18n/config";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
@@ -24,13 +25,20 @@ export const metadata: Metadata = {
     "AI-powered code generation platform that turns your ideas into working applications instantly. Build, deploy, and scale with ease.",
 };
 
+const localeMap = {
+  "zh-CN": zhCN,
+  "en-US": enUS,
+} as const;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = useLocale();
+
   return (
-    <ClerkProvider localization={zhCN}>
+    <ClerkProvider localization={localeMap[locale as Locale] ?? zhCN}>
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

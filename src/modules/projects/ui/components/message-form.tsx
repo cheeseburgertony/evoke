@@ -1,11 +1,13 @@
 "use client";
 
+
 import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextareaAutoSize from "react-textarea-autosize";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
@@ -34,6 +36,8 @@ const formSchema = z.object({
 });
 
 export const MessageForm = ({ projectId }: IMessageFormProps) => {
+  const t = useTranslations("MessageForm");
+
   const [isFocused, setIsFocused] = useState(false);
   const { selectedModelId, setSelectedModelId } = useModelSelection();
 
@@ -111,7 +115,7 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
               minRows={2}
               maxRows={8}
               className="pt-4 resize-none border-none w-full outline-none bg-transparent"
-              placeholder="给 Evoke 发送消息，创建一个......的项目吧"
+              placeholder={t("placeholder")}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault();
@@ -126,7 +130,7 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
             <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
               <span>&#8984;/Ctrl&nbsp;</span>Enter
             </kbd>
-            &nbsp;发送
+            &nbsp;{t("send")}
           </div>
           <div className="flex justify-between items-center gap-x-4">
             <ModelSelector

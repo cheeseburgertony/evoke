@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ChevronDownIcon, ChevronLeftIcon, SunMoonIcon } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
@@ -26,6 +27,8 @@ interface IProjectHeaderProps {
 }
 
 export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
+  const t = useTranslations("ProjectHeader");
+
   const trpc = useTRPC();
   const { data: project } = useSuspenseQuery(
     trpc.projects.getOne.queryOptions({ id: projectId })
@@ -50,26 +53,26 @@ export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
           <DropdownMenuItem asChild>
             <Link href="/">
               <ChevronLeftIcon />
-              <span>回到首页</span>
+              <span>{t("backToHome")}</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="gap-2">
               <SunMoonIcon className="size-4 text-muted-foreground" />
-              <span>外观</span>
+              <span>{t("appearance")}</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
                   <DropdownMenuRadioItem value="light">
-                    <span>浅色</span>
+                    <span>{t("light")}</span>
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="dark">
-                    <span>深色</span>
+                    <span>{t("dark")}</span>
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="system">
-                    <span>跟随系统</span>
+                    <span>{t("system")}</span>
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>

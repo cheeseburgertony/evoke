@@ -1,59 +1,37 @@
+// 模板数据对应的国际化key
 export const PROJECT_TEMPLATES = [
   {
     emoji: "✨",
-    title: "粒子动画登录页",
-    prompt:
-      "创建带有粒子动画背景的登录页面，粒子随鼠标移动产生交互效果。包含浮动卡片、渐变文字和微妙的悬停动画。实现表单输入的流畅验证和成功动效。",
+    titleKey: "particleLogin_title",
+    promptKey: "particleLogin_prompt",
   },
-  {
-    emoji: "🎆",
-    title: "构建烟花生成器",
-    prompt:
-      "使用 Canvas 构建全屏烟花粒子效果生成器，支持多种颜色、形状和爆炸模式的烟花。实现自动播放和鼠标交互触发，包含星空背景和渐变过渡。确保粒子动画流畅自然，添加绽放消散的完整生命周期效果。",
-  },
-  {
-    emoji: "🕰️",
-    title: "交互式时间线",
-    prompt:
-      "构建垂直交互式时间线组件，支持内容卡片、图片展示和进度指示器。添加滚动触发动画、点击展开详情和流畅的时间线导航。",
-  },
+  { emoji: "🎆", titleKey: "fireworks_title", promptKey: "fireworks_prompt" },
+  { emoji: "🕰️", titleKey: "timeline_title", promptKey: "timeline_prompt" },
   {
     emoji: "📸",
-    title: "图片滤镜工作室",
-    prompt:
-      "创建实时图片滤镜应用，支持多种滤镜效果、参数调整和前后对比。添加拖拽上传、下载保存和滤镜组合功能。包含现代化的图片预览界面。",
+    titleKey: "imageFilter_title",
+    promptKey: "imageFilter_prompt",
   },
   {
     emoji: "🖼️",
-    title: "构建粒子头像生成器",
-    prompt:
-      "制作一个粒子头像生成器：用户上传图片后将头像像素化为动态粒子，粒子可跟随鼠标移动、散开/聚合，并具有轻微漂浮效果。使用 Canvas 实现，页面保持简洁、视觉炫酷。",
+    titleKey: "particleAvatar_title",
+    promptKey: "particleAvatar_prompt",
   },
   {
     emoji: "🧊",
-    title: "构建玻璃拟态仪表盘",
-    prompt:
-      "创建一个全屏玻璃拟态 Dashboard，包括毛玻璃卡片、渐变背景、统计模块和图表占位符。使用一致的圆角、阴影和透明度，打造现代高质感的玻璃 UI。",
+    titleKey: "glassDashboard_title",
+    promptKey: "glassDashboard_prompt",
   },
-  {
-    emoji: "🪄",
-    title: "构建 3D 漂浮玻璃卡片",
-    prompt:
-      "构建一组带 3D 倾斜效果的玻璃拟态卡片。卡片根据鼠标移动产生轻微的 3D 旋转，带有半透明玻璃效果、柔和阴影与高光反射。卡片在静止时缓慢自动浮动（上下或轻微旋转）。整体布局简洁、空间感强、动效流畅。",
-  },
-  {
-    emoji: "📋",
-    title: "构建任务看板",
-    prompt:
-      "使用 react-beautiful-dnd 构建一个支持拖放的看板，支持使用本地状态添加和删除任务。使用一致的间距、列宽和悬停效果，打造精致的用户界面。",
-  },
+  { emoji: "🪄", titleKey: "glassCard_title", promptKey: "glassCard_prompt" },
+  { emoji: "📋", titleKey: "kanban_title", promptKey: "kanban_prompt" },
 ] as const;
 
-export const PLACEHOLDER_TEXTS = [
-  "创建一个博客网站...",
-  "创建一个待办事项应用...",
-  "创建一个电商平台...",
-  "创建一个个人作品集...",
-  "创建一个聊天应用...",
-  "创建一个天气预报应用...",
-];
+// placeholder 对应的国际化key
+export const PLACEHOLDER_KEYS = [
+  "placeholder_blog",
+  "placeholder_todo",
+  "placeholder_ecommerce",
+  "placeholder_portfolio",
+  "placeholder_chat",
+  "placeholder_weather",
+] as const;

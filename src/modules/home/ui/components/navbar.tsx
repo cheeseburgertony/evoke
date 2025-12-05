@@ -1,11 +1,9 @@
 "use client";
 
-
-import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { UserControl } from "@/components/user-control";
@@ -17,7 +15,6 @@ const ToggleTheme = dynamic(() => import("./theme-toggle"), { ssr: false });
 
 export const NavBar = () => {
   const t = useTranslations("Navbar");
-
   const isScrolled = useScroll();
   const locale = useLocale();
 
@@ -40,7 +37,7 @@ export const NavBar = () => {
             defaultValue={locale}
             className="mr-2"
             items={[
-              { value: "en", label: "English" },
+              { value: "en-US", label: "English" },
               { value: "zh-CN", label: "简体中文" },
             ]}
           />
@@ -49,11 +46,11 @@ export const NavBar = () => {
             <div className="flex gap-2">
               <SignUpButton>
                 <Button variant="outline" size="sm">
-                  注册
+                  {t("signUp")}
                 </Button>
               </SignUpButton>
               <SignInButton>
-                <Button size="sm">登录</Button>
+                <Button size="sm">{t("signIn")}</Button>
               </SignInButton>
             </div>
           </SignedOut>

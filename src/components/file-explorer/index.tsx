@@ -1,6 +1,8 @@
 "use client";
 
+
 import { useCallback, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
 import {
   ResizableHandle,
@@ -31,6 +33,7 @@ interface IFileExplorerProps {
 }
 
 export const FileExplorer = ({ files }: IFileExplorerProps) => {
+  const t = useTranslations("FileExplorer");
   const [copied, setCopied] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(() => {
     const fileKeys = Object.keys(files);
@@ -77,7 +80,7 @@ export const FileExplorer = ({ files }: IFileExplorerProps) => {
           <div className="h-full w-full flex flex-col">
             <div className="border-b bg-sidebar px-4 py-2 flex justify-between items-center gap-x-2">
               <FileBreadcrumb filePath={selectedFile} />
-              <Hint text="复制到剪贴板" side="bottom">
+              <Hint text={t("copyToClipboard")} side="bottom">
                 <Button
                   variant="outline"
                   size="sm"
@@ -98,7 +101,7 @@ export const FileExplorer = ({ files }: IFileExplorerProps) => {
           </div>
         ) : (
           <div className="flex h-full justify-center items-center text-muted-foreground">
-            选择文件来查看内容
+            {t("select")}
           </div>
         )}
       </ResizablePanel>
