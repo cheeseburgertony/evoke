@@ -1,0 +1,120 @@
+{
+  "AiModels": {
+    "costEffective": "Best cost-performance ratio, fast speed",
+    "llm": "Zhipu AI large model",
+    "llm2": "A powerful model optimized for programming tasks",
+    "llm3": "Largest model in the Qwen 3 series",
+    "llm4": "A powerful model suitable for programming tasks",
+    "llm5": "Meituan large model"
+  },
+  "ErrorBoundaryErrorFallbackPage": {
+    "backToHome": "Back to Home",
+    "copied": "Copied",
+    "copyErrorInfo": "Copy Error Info",
+    "errorDetails": "Error Details",
+    "ifProblemPersists": "If the problem persists, please contact technical support.",
+    "pageEncountered": "The page encountered an unexpected issue.",
+    "reload": "Reload",
+    "somethingWentWrong": "Oops, something went wrong"
+  },
+  "FileExplorer": {
+    "copyToClipboard": "Copy to Clipboard",
+    "select": "Select a file to view its content"
+  },
+  "FragmentWeb": {
+    "copyLink": "Copy Link",
+    "copyLinkFailed": "Failed to copy link, please try again",
+    "linkCopied": "Link copied to clipboard",
+    "openInNewTab": "Open in New Tab",
+    "refresh": "Refresh"
+  },
+  "Functions": {
+    "error": "Something went wrong, please try again."
+  },
+  "HomeConstants": {
+    "card": "Build 3D floating glass cards",
+    "card2": "Build a set of glassmorphism cards with 3D tilt effects. Cards slightly rotate in 3D based on mouse movement, featuring translucent glass effects, soft shadows, and reflective highlights. When idle, cards float slowly with subtle movement or rotation. The layout is clean, spacious, and visually smooth.",
+    "create": "Create a full-screen glassmorphism dashboard with frosted glass cards, gradient background, statistic modules, and chart placeholders. Use consistent rounded corners, shadows, and transparency to achieve a modern, high-quality glass UI.",
+    "create2": "Create a blog website...",
+    "create3": "Create an e-commerce platform...",
+    "create4": "Create a chat application...",
+    "create5": "Create a weather forecast app...",
+    "dashboard": "Build a glassmorphism dashboard",
+    "delete": "Build a drag-and-drop Kanban board using react-beautiful-dnd, supporting adding and deleting tasks using local state. Use consistent spacing, column widths, and hover effects to create a polished UI.",
+    "generator": "Build a fireworks generator",
+    "generator2": "Build a particle avatar generator",
+    "generator3": "Create a particle avatar generator: After uploading an image, pixelate the avatar into dynamic particles that follow the mouse, scatter/converge, and float subtly. Implement using Canvas with a clean, visually impressive design.",
+    "kanban": "Build a task Kanban board",
+    "particleAnimation": "Particle animation login page",
+    "particleAnimation2": "Create a login page with a particle animation background, with particles reacting to mouse movement. Include floating cards, gradient text, and subtle hover animations. Implement smooth validation and success animations for the inputs.",
+    "particleAnimation3": "Build a full-screen fireworks particle effect generator using Canvas, supporting multiple colors, shapes, and explosion modes. Add autoplay and mouse-trigger interactions, with a starry background and gradient transitions. Ensure natural, smooth particle animation, with complete lifecycle effects of burst and fade.",
+    "portfolio": "Create a personal portfolio...",
+    "save": "Create a real-time image filter app supporting multiple filters, parameter adjustments, and before/after comparison. Include drag-and-drop upload, download saving, and filter combos. Provide a modern image preview UI.",
+    "studio": "Image Filter Studio",
+    "timeline": "Interactive timeline",
+    "timeline2": "Build a vertical interactive timeline component with content cards, image display, and progress indicators. Add scroll-triggered animations, click-to-expand details, and smooth timeline navigation.",
+    "todo": "Create a to-do app..."
+  },
+  "HomePage": {
+    "create": "Use Evoke to create your application",
+    "create2": "Create your apps and websites by chatting with AI"
+  },
+  "Init": {
+    "userNotLoggedIn": "User not logged in"
+  },
+  "MessageCardCCpnsFragmentCard": {
+    "preview": "Preview"
+  },
+  "MessageForm": {
+    "send": "Send a message to Evoke and start creating a project..."
+  },
+  "MessageLoading": {
+    "adding": "Adding final touches...",
+    "almostDone": "Almost done...",
+    "analyzing": "Analyzing your request...",
+    "building": "Building your website...",
+    "generating": "Generating...",
+    "loading": "Loading...",
+    "making": "Creating components...",
+    "optimizing": "Optimizing layout...",
+    "thinking": "Thinking..."
+  },
+  "Navbar": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "zhCN": "简体中文"
+  },
+  "PricingPage": {
+    "pricingTitle": "Pricing",
+    "subscription": "Choose the plan that suits you"
+  },
+  "ProjectForm": {
+    "send": "",
+    "send2": ""
+  },
+  "ProjectHeader": {
+    "appearance": "Appearance",
+    "backToHome": "Back to Home",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "ProjectList": {
+    "noWorks": "No works yet",
+    "sWorks": "",
+    "text_我": "I"
+  },
+  "ProjectsViewsProjectView": {
+    "code": "Code",
+    "preview": "Preview",
+    "upgrade": "Upgrade"
+  },
+  "Usage": {
+    "free": "Free",
+    "remaining": "",
+    "resetAfter": "",
+    "unknownTime": "Unknown time",
+    "upgrade": "Upgrade",
+    "userNotLoggedIn": "User not logged in"
+  }
+}

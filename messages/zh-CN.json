@@ -1,0 +1,120 @@
+{
+  "AiModels": {
+    "costEffective": "性价比最高，速度快",
+    "llm": "智谱 AI 大模型",
+    "llm2": "专为编程任务优化的强大模型",
+    "llm3": "Qwen 3 系列最大模型",
+    "llm4": "适合编程任务的强大模型",
+    "llm5": "美团大模型"
+  },
+  "ErrorBoundaryErrorFallbackPage": {
+    "backToHome": "返回首页",
+    "copied": "已复制",
+    "copyErrorInfo": "复制错误信息",
+    "errorDetails": "错误详情",
+    "ifProblemPersists": "如果问题持续存在，请联系技术支持",
+    "pageEncountered": "页面遇到了一些意外情况。",
+    "reload": "重新加载",
+    "somethingWentWrong": "哎呀，出了点问题"
+  },
+  "FileExplorer": {
+    "copyToClipboard": "复制到剪贴板",
+    "select": "选择文件来查看内容"
+  },
+  "FragmentWeb": {
+    "copyLink": "复制链接",
+    "copyLinkFailed": "复制链接失败，请重试",
+    "linkCopied": "链接已复制到剪贴板",
+    "openInNewTab": "在新的标签页打开",
+    "refresh": "刷新"
+  },
+  "Functions": {
+    "error": "出现了一些错误，请再试一次。"
+  },
+  "HomeConstants": {
+    "card": "构建 3D 漂浮玻璃卡片",
+    "card2": "构建一组带 3D 倾斜效果的玻璃拟态卡片。卡片根据鼠标移动产生轻微的 3D 旋转，带有半透明玻璃效果、柔和阴影与高光反射。卡片在静止时缓慢自动浮动（上下或轻微旋转）。整体布局简洁、空间感强、动效流畅。",
+    "create": "创建一个全屏玻璃拟态 Dashboard，包括毛玻璃卡片、渐变背景、统计模块和图表占位符。使用一致的圆角、阴影和透明度，打造现代高质感的玻璃 UI。",
+    "create2": "创建一个博客网站...",
+    "create3": "创建一个电商平台...",
+    "create4": "创建一个聊天应用...",
+    "create5": "创建一个天气预报应用...",
+    "dashboard": "构建玻璃拟态仪表盘",
+    "delete": "使用 react-beautiful-dnd 构建一个支持拖放的看板，支持使用本地状态添加和删除任务。使用一致的间距、列宽和悬停效果，打造精致的用户界面。",
+    "generator": "构建烟花生成器",
+    "generator2": "构建粒子头像生成器",
+    "generator3": "制作一个粒子头像生成器：用户上传图片后将头像像素化为动态粒子，粒子可跟随鼠标移动、散开/聚合，并具有轻微漂浮效果。使用 Canvas 实现，页面保持简洁、视觉炫酷。",
+    "kanban": "构建任务看板",
+    "particleAnimation": "粒子动画登录页",
+    "particleAnimation2": "创建带有粒子动画背景的登录页面，粒子随鼠标移动产生交互效果。包含浮动卡片、渐变文字和微妙的悬停动画。实现表单输入的流畅验证和成功动效。",
+    "particleAnimation3": "使用 Canvas 构建全屏烟花粒子效果生成器，支持多种颜色、形状和爆炸模式的烟花。实现自动播放和鼠标交互触发，包含星空背景和渐变过渡。确保粒子动画流畅自然，添加绽放消散的完整生命周期效果。",
+    "portfolio": "创建一个个人作品集...",
+    "save": "创建实时图片滤镜应用，支持多种滤镜效果、参数调整和前后对比。添加拖拽上传、下载保存和滤镜组合功能。包含现代化的图片预览界面。",
+    "studio": "图片滤镜工作室",
+    "timeline": "交互式时间线",
+    "timeline2": "构建垂直交互式时间线组件，支持内容卡片、图片展示和进度指示器。添加滚动触发动画、点击展开详情和流畅的时间线导航。",
+    "todo": "创建一个待办事项应用..."
+  },
+  "HomePage": {
+    "create": "用 Evoke 来创建你的应用",
+    "create2": "通过和 AI 对话来创建你的应用和网站"
+  },
+  "Init": {
+    "userNotLoggedIn": "用户未登录"
+  },
+  "MessageCardCCpnsFragmentCard": {
+    "preview": "预览"
+  },
+  "MessageForm": {
+    "send": "给 Evoke 发送消息，创建一个......的项目吧"
+  },
+  "MessageLoading": {
+    "adding": "添加最后的润色中...",
+    "almostDone": "即将完成...",
+    "analyzing": "正在分析您的请求...",
+    "building": "正在构建您的网站...",
+    "generating": "生成中...",
+    "loading": "加载中...",
+    "making": "制作组件中...",
+    "optimizing": "优化布局中...",
+    "thinking": "思考中..."
+  },
+  "Navbar": {
+    "signIn": "登录",
+    "signUp": "注册",
+    "zhCN": "简体中文"
+  },
+  "PricingPage": {
+    "pricingTitle": "订阅价格",
+    "subscription": "选择适合你的订阅"
+  },
+  "ProjectForm": {
+    "send": "给 Evoke 发送消息，{displayText}",
+    "send2": "发送"
+  },
+  "ProjectHeader": {
+    "appearance": "外观",
+    "backToHome": "回到首页",
+    "dark": "深色",
+    "light": "浅色",
+    "system": "跟随系统"
+  },
+  "ProjectList": {
+    "noWorks": "暂无作品",
+    "sWorks": "{user?.firstName || t(\"text_我\")}的作品",
+    "text_我": "我"
+  },
+  "ProjectsViewsProjectView": {
+    "code": "代码",
+    "preview": "预览",
+    "upgrade": "升级"
+  },
+  "Usage": {
+    "free": "免费",
+    "remaining": "剩余 {points} 次{!hasProAccess && t(\"free\")}额度",
+    "resetAfter": "{resetTime}后重置",
+    "unknownTime": "未知时间",
+    "upgrade": "升级",
+    "userNotLoggedIn": "用户未登录"
+  }
+}

@@ -1,18 +1,25 @@
 "use client";
 
+
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useLocale } from "next-intl";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { UserControl } from "@/components/user-control";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const ToggleTheme = dynamic(() => import("./theme-toggle"), { ssr: false });
 
 export const NavBar = () => {
+  const t = useTranslations("Navbar");
+
   const isScrolled = useScroll();
+  const locale = useLocale();
 
   return (
     <nav
@@ -29,6 +36,14 @@ export const NavBar = () => {
           <span className="font-semibold text-lg">Evoke</span>
         </Link>
         <div className="flex items-center justify-between">
+          <LocaleSwitcher
+            defaultValue={locale}
+            className="mr-2"
+            items={[
+              { value: "en", label: "English" },
+              { value: "zh-CN", label: "简体中文" },
+            ]}
+          />
           <ToggleTheme className="mr-2" />
           <SignedOut>
             <div className="flex gap-2">
