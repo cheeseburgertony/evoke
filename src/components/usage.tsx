@@ -1,48 +1,62 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { zhCN } from "date-fns/locale";
+import { useCallback, useMemo } from "react";
+import { enUS, zhCN } from "date-fns/locale";
 import { useAuth } from "@clerk/nextjs";
 import { CrownIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "./ui/button";
+import { type Locale } from "@/i18n/config";
 
 interface IUsageProps {
   points: number;
   msBeforeNext: number;
 }
 
+const localeMap = {
+  "zh-CN": zhCN,
+  "en-US": enUS,
+} as const;
+
 export const Usage = ({ points, msBeforeNext }: IUsageProps) => {
-  const [now] = useState(() => Date.now());
+  const t = useTranslations("Usage");
+  const locale = useLocale();
+
   const { has } = useAuth();
   const hasProAccess = has?.({ plan: "pro" });
 
-  const resetTime = useMemo(() => {
+  const suffix = useMemo(() => {
+    return !hasProAccess ? t("free") : "";
+  }, [hasProAccess, t]);
+
+  const formatResetTime = useCallback(() => {
     try {
-      return formatDistanceToNow(new Date(now + msBeforeNext), {
-        locale: zhCN,
+      return formatDistanceToNow(Date.now() + msBeforeNext, {
+        locale: localeMap[locale as Locale] ?? zhCN,
       });
-    } catch (error) {
-      console.error("Error formatting reset time:", error);
-      return "未知时间";
+    } catch {
+      return t("unknownTime");
     }
-  }, [now, msBeforeNext]);
+  }, [msBeforeNext, locale, t]);
+
+  const resetTime = useMemo(() => formatResetTime(), [formatResetTime]);
 
   return (
     <div className="rounded-t-xl bg-background border border-b-0 p-2.5">
       <div className="flex items-center gap-x-2">
         <div>
-          <p className="text-sm">
-            剩余 {points} 次{!hasProAccess && "免费"}额度
+          <p className="text-sm">{t("remaining", { points, suffix })}</p>
+          <p className="text-xs text-muted-foreground">
+            {t("resetAfter", { resetTime })}
           </p>
-          <p className="text-xs text-muted-foreground">{resetTime}后重置</p>
         </div>
         {!hasProAccess && (
           <Button asChild size="sm" variant="tertiary" className="ml-auto">
             <Link href="/pricing">
               <CrownIcon />
-              升级
+              {t("upgrade")}
             </Link>
           </Button>
         )}

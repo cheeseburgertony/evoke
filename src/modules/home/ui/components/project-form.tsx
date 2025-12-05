@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { useClerk } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextareaAutoSize from "react-textarea-autosize";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
@@ -17,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useModelSelection } from "@/hooks/use-model-selection";
 import { useTypewriter } from "@/hooks/use-typewriter";
-import { PLACEHOLDER_TEXTS, PROJECT_TEMPLATES } from "../../constants";
+import { PLACEHOLDER_KEYS, PROJECT_TEMPLATES } from "../../constants";
 
 const ModelSelector = dynamic(() => import("@/components/model-selector"), {
   ssr: false,
@@ -31,13 +32,17 @@ const formSchema = z.object({
 });
 
 export const ProjectForm = () => {
+  const t = useTranslations("ProjectForm");
+  const tConstants = useTranslations("HomeConstants");
   const [isFocused, setIsFocused] = useState(false);
   const { selectedModelId, setSelectedModelId } = useModelSelection();
   const router = useRouter();
   const clerk = useClerk();
 
+  const placeholderTexts = PLACEHOLDER_KEYS.map((key) => tConstants(key));
+
   const { displayText } = useTypewriter({
-    texts: PLACEHOLDER_TEXTS,
+    texts: placeholderTexts,
     typingSpeed: 80,
     deletingSpeed: 40,
     pauseTime: 2500,
@@ -116,7 +121,7 @@ export const ProjectForm = () => {
                 {/* 打字机 placeholder */}
                 {!field.value && (
                   <div className="absolute top-4 left-0 pointer-events-none text-muted-foreground">
-                    给 Evoke 发送消息，{displayText}
+                    {t("placeholder", { displayText })}
                   </div>
                 )}
                 <TextareaAutoSize
@@ -142,7 +147,7 @@ export const ProjectForm = () => {
               <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                 <span>&#8984;/Ctrl&nbsp;</span>Enter
               </kbd>
-              &nbsp;发送
+              &nbsp;{t("send")}
             </div>
             <div className="flex justify-between items-center gap-x-4">
               <ModelSelector
@@ -170,13 +175,13 @@ export const ProjectForm = () => {
         <div className="flex-wrap justify-center gap-2 hidden md:flex max-w-3xl">
           {PROJECT_TEMPLATES.map((template) => (
             <Button
-              key={template.title}
+              key={template.titleKey}
               variant="outline"
               size="sm"
               className="bg-white/30 dark:bg-slate-900/40 backdrop-blur-lg border-white/40 dark:border-white/10 hover:bg-white/70 dark:hover:bg-slate-800/60 hover:border-white/60 dark:hover:border-white/20 transition-all duration-200 shadow-sm"
-              onClick={() => onSelectTemplate(template.prompt)}
+              onClick={() => onSelectTemplate(tConstants(template.promptKey))}
             >
-              {template.emoji} {template.title}
+              {template.emoji} {tConstants(template.titleKey)}
             </Button>
           ))}
         </div>

@@ -1,0 +1,121 @@
+{
+  "AiModels": {
+    "costEffective": "Best cost performance, fast speed",
+    "llm": "Zhipu AI large model",
+    "llm2": "A powerful model optimized for programming tasks",
+    "llm3": "The largest model in the Qwen 3 series",
+    "llm4": "A powerful model suitable for coding tasks",
+    "llm5": "Meituan large model"
+  },
+  "ErrorBoundaryErrorFallbackPage": {
+    "backToHome": "Back to Home",
+    "copied": "Copied",
+    "copyErrorInfo": "Copy error message",
+    "errorDetails": "Error Details",
+    "ifProblemPersists": "If the issue persists, please contact technical support",
+    "pageEncountered": "The page encountered an unexpected issue.",
+    "reload": "Reload",
+    "somethingWentWrong": "Oops, something went wrong"
+  },
+  "FileExplorer": {
+    "copyToClipboard": "Copy to Clipboard",
+    "select": "Select a file to view its content"
+  },
+  "FragmentWeb": {
+    "copyLink": "Copy Link",
+    "copyLinkFailed": "Failed to copy link, please try again",
+    "linkCopied": "Link copied to clipboard",
+    "openInNewTab": "Open in new tab",
+    "refresh": "Refresh"
+  },
+  "Functions": {
+    "error": "Something went wrong, please try again."
+  },
+  "HomeConstants": {
+    "particleLogin_title": "Particle Animation Login",
+    "particleLogin_prompt": "Create a login page with particle animation background. Particles interact with mouse movements. Include floating card, gradient text, subtle hover animations, and smooth form validation/success effects.",
+    "fireworks_title": "Build a Fireworks Generator",
+    "fireworks_prompt": "Use Canvas to build a full-screen fireworks particle generator supporting various colors, shapes, and explosion modes. Include auto-play and mouse-triggered effects with starry background and gradient transitions. Smooth particle animation with full lifecycle effects.",
+    "timeline_title": "Interactive Timeline",
+    "timeline_prompt": "Build a vertical interactive timeline component with content cards, image display, and progress indicators. Add scroll-triggered animation, expandable details, and smooth navigation.",
+    "imageFilter_title": "Image Filter Studio",
+    "imageFilter_prompt": "Create a real-time image filter application supporting multiple filters, parameter adjustments, and before/after comparison. Includes drag-and-drop upload, download saving, and filter combinations. Modern UI for image preview.",
+    "particleAvatar_title": "Build a Particle Avatar Generator",
+    "particleAvatar_prompt": "Create a particle-based avatar generator: after uploading an image, convert the avatar into dynamic particles that follow the cursor, disperse/aggregate, and gently drift. Implemented with Canvas for a clean and visually striking page.",
+    "glassDashboard_title": "Build a Glassmorphic Dashboard",
+    "glassDashboard_prompt": "Build a full-screen glassmorphic dashboard with frosted glass cards, gradient background, statistic modules, and chart placeholders. Maintain consistent corner radius, shadows, and transparency for a modern, high-quality glass UI.",
+    "glassCard_title": "Build 3D Floating Glass Cards",
+    "glassCard_prompt": "Create a set of glassmorphic cards with 3D tilt effects. The cards slightly rotate based on mouse movement with translucent textures, soft shadows, and highlights. When idle, the cards float subtly (up-down or slight rotation). Clean layout, strong sense of space, smooth animation.",
+    "kanban_title": "Build a Task Kanban",
+    "kanban_prompt": "Use react-beautiful-dnd to build a draggable Kanban board with tasks that can be added or removed using local state. Consistent spacing, column width, and hover effects for a polished UI.",
+    "placeholder_blog": "Create a blog website...",
+    "placeholder_todo": "Create a todo application...",
+    "placeholder_ecommerce": "Create an e-commerce platform...",
+    "placeholder_portfolio": "Create a personal portfolio...",
+    "placeholder_chat": "Create a chat application...",
+    "placeholder_weather": "Create a weather forecast app..."
+  },
+  "HomePage": {
+    "create": "Use Evoke to create your app",
+    "create2": "Create your apps and websites by conversing with AI"
+  },
+  "Init": {
+    "userNotLoggedIn": "User not logged in"
+  },
+  "MessageCardCCpnsFragmentCard": {
+    "preview": "Preview"
+  },
+  "MessageForm": {
+    "placeholder": "Send a message to Evoke to create a project for......",
+    "send": "Send"
+  },
+  "MessageLoading": {
+    "adding": "Adding final touches...",
+    "almostDone": "Almost done...",
+    "analyzing": "Analyzing your request...",
+    "building": "Building your website...",
+    "generating": "Generating...",
+    "loading": "Loading...",
+    "making": "Creating components...",
+    "optimizing": "Optimizing layout...",
+    "thinking": "Thinking..."
+  },
+  "Navbar": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "zhCN": "简体中文"
+  },
+  "PricingPage": {
+    "pricingTitle": "Pricing",
+    "subscription": "Choose the subscription that fits you"
+  },
+  "ProjectForm": {
+    "placeholder": "Send a message to Evoke, {displayText}",
+    "send": "Send"
+  },
+  "ProjectHeader": {
+    "appearance": "Appearance",
+    "backToHome": "Back to Home",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "ProjectList": {
+    "noWorks": "No works yet",
+    "worksOf": "{name}'s Works",
+    "me": "Me"
+  },
+  "ProjectsViewsProjectView": {
+    "code": "Code",
+    "preview": "Preview",
+    "upgrade": "Upgrade"
+  },
+  "Usage": {
+    "free": "Free",
+    "remaining": "{points} uses {suffix} remaining",
+    "resetAfter": "Resets after {resetTime}",
+    "unknownTime": "Unknown time",
+    "upgrade": "Upgrade",
+    "userNotLoggedIn": "User not logged in"
+  }
+}

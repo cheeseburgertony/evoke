@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ExternalLinkIcon, RefreshCcwIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Fragment } from "@/generated/prisma/client";
@@ -10,6 +11,8 @@ interface IFragmentWebProps {
 }
 
 export const FragmentWeb = ({ data }: IFragmentWebProps) => {
+  const t = useTranslations("FragmentWeb");
+
   const [fragmentKey, setFragmentKey] = useState(0);
   const [copied, setCopied] = useState(false);
 
@@ -21,23 +24,23 @@ export const FragmentWeb = ({ data }: IFragmentWebProps) => {
     try {
       await navigator.clipboard.writeText(data?.sandboxUrl || "");
       setCopied(true);
-      toast.success("链接已复制到剪贴板");
+      toast.success(t("linkCopied"));
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       console.error("复制链接失败:", error);
-      toast.error("复制链接失败，请重试");
+      toast.error(t("copyLinkFailed"));
     }
   };
 
   return (
     <div className="flex flex-col w-full h-full">
       <div className="p-2 border-b bg-sidebar flex items-center gap-x-2">
-        <Hint text="刷新" side="bottom" align="start">
+        <Hint text={t("refresh")} side="bottom" align="start">
           <Button size="sm" variant="outline" onClick={handleRefresh}>
             <RefreshCcwIcon />
           </Button>
         </Hint>
-        <Hint text="复制链接" side="bottom">
+        <Hint text={t("copyLink")} side="bottom">
           <Button
             size="sm"
             variant="outline"
@@ -48,7 +51,7 @@ export const FragmentWeb = ({ data }: IFragmentWebProps) => {
             <span className="truncate">{data?.sandboxUrl}</span>
           </Button>
         </Hint>
-        <Hint text="在新的标签页打开" side="bottom" align="start">
+        <Hint text={t("openInNewTab")} side="bottom" align="start">
           <Button
             size="sm"
             variant="outline"

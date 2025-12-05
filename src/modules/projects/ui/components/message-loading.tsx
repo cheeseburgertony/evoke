@@ -1,29 +1,20 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 // 循环显示加载消息
 const ShimmerMessages = () => {
-  // const messges = [
-  //   'Thinking...',
-  //   'Loading...',
-  //   'Generating...',
-  //   'Analyzing your request...',
-  //   'Building your website...',
-  //   'Crafting components...',
-  //   'Optimizing layout...',
-  //   'Adding final touches...',
-  //   'Almost ready...'
-  // ]
+  const t = useTranslations("MessageLoading");
   const messages = [
-    "思考中...",
-    "加载中...",
-    "生成中...",
-    "正在分析您的请求...",
-    "正在构建您的网站...",
-    "制作组件中...",
-    "优化布局中...",
-    "添加最后的润色中...",
-    "即将完成...",
+    t("thinking"),
+    t("loading"),
+    t("generating"),
+    t("analyzing"),
+    t("building"),
+    t("making"),
+    t("optimizing"),
+    t("adding"),
+    t("almostDone"),
   ];
 
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
