@@ -65,7 +65,7 @@ export const LocaleSwitcher = ({
             <DropdownMenuItem
               key={item.value}
               onClick={() => handleChange(item.value)}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between cursor-pointer"
             >
               <span>{item.label}</span>
               {selectedValue === item.value && <CheckIcon className="size-4" />}

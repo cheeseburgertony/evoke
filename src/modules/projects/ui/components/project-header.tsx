@@ -26,6 +26,8 @@ interface IProjectHeaderProps {
   projectId: string;
 }
 
+const themes = ["light", "dark", "system"] as const;
+
 export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
   const t = useTranslations("ProjectHeader");
 
@@ -50,7 +52,7 @@ export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="bottom" align="start">
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <Link href="/">
               <ChevronLeftIcon />
               <span>{t("backToHome")}</span>
@@ -65,15 +67,15 @@ export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-                  <DropdownMenuRadioItem value="light">
-                    <span>{t("light")}</span>
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="dark">
-                    <span>{t("dark")}</span>
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="system">
-                    <span>{t("system")}</span>
-                  </DropdownMenuRadioItem>
+                  {themes.map((theme) => (
+                    <DropdownMenuRadioItem
+                      key={theme}
+                      value={theme}
+                      className="cursor-pointer"
+                    >
+                      <span>{t(theme)}</span>
+                    </DropdownMenuRadioItem>
+                  ))}
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
