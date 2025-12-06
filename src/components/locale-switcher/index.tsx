@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { type Locale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 import { setUserLocale } from "@/i18n/locale";
@@ -15,8 +15,8 @@ import {
 import { CheckIcon, LanguagesIcon } from "lucide-react";
 
 interface ILocaleSwitcherProps {
-  defaultValue: string;
-  items: Array<{ value: string; label: string }>;
+  defaultValue: Locale;
+  items: Array<{ value: Locale; label: string }>;
   className?: string;
 }
 
@@ -28,11 +28,14 @@ export const LocaleSwitcher = ({
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [isPending, startTransition] = useTransition();
 
-  const handleChange = (value: string) => {
-    const locale = value as Locale;
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue]);
+
+  const handleChange = (value: Locale) => {
     startTransition(async () => {
       try {
-        await setUserLocale(locale);
+        await setUserLocale(value);
         setSelectedValue(value);
       } catch (error) {
         console.error("Failed to update locale:", error);
@@ -46,6 +49,7 @@ export const LocaleSwitcher = ({
         <Button
           size="icon"
           variant="ghost"
+          aria-label="Switch language"
           className={cn(
             className,
             isPending && "opacity-50",
@@ -63,8 +67,8 @@ export const LocaleSwitcher = ({
               onClick={() => handleChange(item.value)}
               className="flex items-center justify-between"
             >
-              <span className="text-slate-900">{item.label}</span>
-              {selectedValue === item.value && <CheckIcon />}
+              <span>{item.label}</span>
+              {selectedValue === item.value && <CheckIcon className="size-4" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>
