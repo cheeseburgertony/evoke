@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { UserControl } from "@/components/user-control";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
+import { type Locale } from "@/i18n/config";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const ToggleTheme = dynamic(() => import("./theme-toggle"), { ssr: false });
@@ -34,11 +35,11 @@ export const NavBar = () => {
         </Link>
         <div className="flex items-center justify-between">
           <LocaleSwitcher
-            defaultValue={locale}
+            defaultValue={locale as Locale}
             className="mr-2"
             items={[
-              { value: "en-US", label: "English" },
               { value: "zh-CN", label: "简体中文" },
+              { value: "en-US", label: "English" },
             ]}
           />
           <ToggleTheme className="mr-2" />
