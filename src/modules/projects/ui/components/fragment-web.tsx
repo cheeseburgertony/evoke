@@ -69,6 +69,7 @@ export const FragmentWeb = ({ data }: IFragmentWebProps) => {
         key={fragmentKey}
         className="h-full w-full"
         sandbox="allow-forms allow-scripts allow-same-origin"
+        allow="clipboard-write"
         src={data?.sandboxUrl}
       />
     </div>
