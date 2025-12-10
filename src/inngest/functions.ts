@@ -8,7 +8,12 @@ import {
 } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import { z } from "zod";
-import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "@/prompt";
+import {
+  FRAGMENT_TITLE_PROMPT,
+  PROJECT_TITLE_PROMPT,
+  PROMPT,
+  RESPONSE_PROMPT,
+} from "@/prompt";
 import { inngest } from "./client";
 import {
   createModelInstance,
@@ -213,6 +218,35 @@ export const codeAgentFunction = inngest.createFunction(
         return codeAgent;
       },
     });
+
+    // 生成项目标题
+    const isFirstConversation = previousMessages.length === 1;
+    if (isFirstConversation) {
+      const projectTitleGenerator = createAgent<AgentState>({
+        name: "project-title-generator",
+        description: "A project title generator",
+        system: PROJECT_TITLE_PROMPT,
+        model: createModelInstance("LongCat-Flash-Chat"),
+      });
+
+      const { output: projectTitleOutput } = await projectTitleGenerator.run(
+        event.data.value
+      );
+
+      await step.run("update-project-name", async () => {
+        const { name } = await prisma.project.update({
+          where: { id: projectId },
+          data: { name: parseAgentOutput(projectTitleOutput) },
+        });
+
+        sseManager.sendEvent(projectId, {
+          type: "project_name_updated",
+          name,
+        });
+
+        return name;
+      });
+    }
 
     // 让网络自动调用agent完成任务
     const result = await network.run(event.data.value, { state });
