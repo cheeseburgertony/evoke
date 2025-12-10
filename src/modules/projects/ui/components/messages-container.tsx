@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import type { Fragment } from "@/generated/prisma/client";
+import { useSSE } from "@/hooks/use-sse";
 import { MessageCard } from "./message-card";
 import { MessageForm } from "./message-form";
 import { MessageLoading } from "./message-loading";
@@ -23,10 +24,21 @@ export const MessagesContainer = ({
   const lastAIMessageIdRef = useRef<string | null>(null);
 
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { data: messages } = useSuspenseQuery(
-    // TODO: 进行实时的消息更新
-    trpc.messages.getMany.queryOptions({ projectId }, { refetchInterval: 2000 })
+    trpc.messages.getMany.queryOptions({ projectId })
   );
+
+  // 使用SSE实时更新消息
+  useSSE(projectId, {
+    onMessage: (data) => {
+      if (data.type === "message_created") {
+        queryClient.invalidateQueries(
+          trpc.messages.getMany.queryOptions({ projectId })
+        );
+      }
+    },
+  });
 
   const lastMessage = messages[messages.length - 1];
   const isUserLastMessage = lastMessage?.role === "USER";
@@ -69,7 +81,7 @@ export const MessagesContainer = ({
         </div>
       </div>
       <div className="relative p-3 pt-1">
-        <div className="absolute -top-6 left-0 right-0 h-6 bg-gradient-to-b from-transparent to-background/70 pointer-events-none" />
+        <div className="absolute -top-6 left-0 right-0 h-6 bg-linear-to-b from-transparent to-background/70 pointer-events-none" />
         <MessageForm projectId={projectId} />
       </div>
     </div>
