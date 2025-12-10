@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import { Suspense, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useQueryClient } from "@tanstack/react-query";
 import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
+import { useSSE } from "@/hooks/use-sse";
+import { useTRPC } from "@/trpc/client";
 import type { Fragment } from "@/generated/prisma/client";
 import {
   ResizableHandle,
@@ -33,8 +36,27 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
 
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabState, setTabState] = useState<"preview" | "code">("preview");
+  // const [isGenerating, setIsGenerating] = useState(false);
   const { has } = useAuth();
   const hasProAccess = has?.({ plan: "pro" });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  // 监听进度更新
+  useSSE(projectId, {
+    onMessage: (data) => {
+      if (data.type === "project_name_updated") {
+        // 更新项目名字
+        queryClient.invalidateQueries(
+          trpc.projects.getOne.queryOptions({ id: projectId })
+        );
+      } else if (data.type === "message_created") {
+        queryClient.invalidateQueries(
+          trpc.messages.getMany.queryOptions({ projectId })
+        );
+      }
+    },
+  });
 
   return (
     <div className="h-screen">

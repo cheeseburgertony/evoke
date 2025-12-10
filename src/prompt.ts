@@ -132,3 +132,13 @@ The title should be:
 
 Only return the raw title.
 `;
+
+export const PROJECT_TITLE_PROMPT = `
+You are an application naming expert.
+Generate a short, creative, tech-style project name based on the following description.
+Rules:
+1. If the description is in Chinese, output a Chinese title; if it is in English, output an English title.
+2. Chinese title: 1-5 words; English title: 2-5 words.
+3. Keep it concise and suitable for AI tools / SaaS products.
+4. Do not include punctuation.
+`;

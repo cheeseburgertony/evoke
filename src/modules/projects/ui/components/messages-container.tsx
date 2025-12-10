@@ -1,10 +1,9 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import type { Fragment } from "@/generated/prisma/client";
-import { useSSE } from "@/hooks/use-sse";
 import { MessageCard } from "./message-card";
 import { MessageForm } from "./message-form";
 import { MessageLoading } from "./message-loading";
@@ -24,21 +23,9 @@ export const MessagesContainer = ({
   const lastAIMessageIdRef = useRef<string | null>(null);
 
   const trpc = useTRPC();
-  const queryClient = useQueryClient();
   const { data: messages } = useSuspenseQuery(
     trpc.messages.getMany.queryOptions({ projectId })
   );
-
-  // 使用SSE实时更新消息
-  useSSE(projectId, {
-    onMessage: (data) => {
-      if (data.type === "message_created") {
-        queryClient.invalidateQueries(
-          trpc.messages.getMany.queryOptions({ projectId })
-        );
-      }
-    },
-  });
 
   const lastMessage = messages[messages.length - 1];
   const isUserLastMessage = lastMessage?.role === "USER";
