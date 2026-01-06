@@ -27,6 +27,7 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { MessagesContainer } from "../components/messages-container";
 import { ProjectHeader } from "../components/project-header";
 import { FragmentWeb } from "../components/fragment-web";
+import { PreviewLoading } from "../components/preview-loading";
 
 interface IProjectViewProps {
   projectId: string;
@@ -92,7 +93,7 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
         <ResizableHandle className="hover:bg-primary transition-colors" />
         <ResizablePanel defaultSize={65} minSize={50}>
           <Tabs
-            className="h-full gap-y-0"
+            className="h-full flex flex-col gap-y-0"
             defaultValue="preview"
             value={tabState}
             onValueChange={(value) => setTabState(value as "preview" | "code")}
@@ -120,10 +121,18 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
                 <UserControl />
               </div>
             </div>
-            <TabsContent value="preview">
-              {!!activeFragment && <FragmentWeb data={activeFragment} />}
+            <TabsContent value="preview" className="flex-1 min-h-0 relative">
+              {!!activeFragment ? (
+                <FragmentWeb data={activeFragment} />
+              ) : progress ? (
+                <PreviewLoading />
+              ) : (
+                <div className="h-full flex items-center justify-center text-muted-foreground/40">
+                  <EyeIcon className="h-16 w-16" />
+                </div>
+              )}
             </TabsContent>
-            <TabsContent value="code" className="min-h-0">
+            <TabsContent value="code" className="flex-1 min-h-0">
               {!!activeFragment && (
                 <FileExplorer
                   files={activeFragment.files as { [path: string]: string }}
