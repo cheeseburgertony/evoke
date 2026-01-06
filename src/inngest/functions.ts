@@ -312,7 +312,6 @@ export const codeAgentFunction = inngest.createFunction(
       state,
       streaming: {
         publish: async (chunk: AgentMessageChunk) => {
-          console.log("chunk:", chunk);
           if (
             chunk.event === "text.delta" &&
             typeof chunk.data.content === "string"
