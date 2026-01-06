@@ -1,5 +1,5 @@
 import { sseManager } from "@/lib/sse-manager";
-import { ProgressStep } from "@/types/progress";
+import { type ProgressStep } from "@/types/progress";
 
 /**
  * 生成进度管理器

@@ -5,6 +5,7 @@ import {
   Tool,
   type Message,
   createState,
+  AgentMessageChunk,
 } from "@inngest/agent-kit";
 import { Sandbox } from "@e2b/code-interpreter";
 import { z } from "zod";
@@ -23,6 +24,7 @@ import {
 } from "./utils";
 import prisma from "@/lib/prisma";
 import { sseManager } from "@/lib/sse-manager";
+import { ProgressManager } from "./progress-manager";
 
 interface AgentState {
   summary: string;
@@ -36,6 +38,8 @@ export const codeAgentFunction = inngest.createFunction(
   // 处理程序
   async ({ event, step }) => {
     const projectId = event.data.projectId;
+    const progress = new ProgressManager(projectId);
+    progress.addStep("Analyzing request...", { type: "thinking" });
 
     // 获取沙盒id
     const sandboxId = await step.run("get-sandbox-id", async () => {
@@ -90,7 +94,11 @@ export const codeAgentFunction = inngest.createFunction(
             command: z.string(),
           }),
           handler: async ({ command }, { step }) => {
-            return await step?.run("terminal", async () => {
+            const stepId = progress.addStep("Executing command", {
+              detail: command,
+              type: "command",
+            });
+            const output = await step?.run("terminal", async () => {
               const buffers = { stdout: "", stderr: "" };
 
               try {
@@ -105,12 +113,23 @@ export const codeAgentFunction = inngest.createFunction(
                 });
                 return result.stdout;
               } catch (e) {
-                console.error(
-                  `Command failed: ${e} \nstdout: ${buffers.stdout}\nstderr: ${buffers.stderr}`
-                );
-                return `Command failed: ${e} \nstdout: ${buffers.stdout}\nstderr: ${buffers.stderr}`;
+                const errorOutput = `Command failed: ${e} \nstdout: ${buffers.stdout}\nstderr: ${buffers.stderr}`;
+                console.error(errorOutput);
+                return errorOutput;
               }
             });
+
+            if (output?.startsWith("Command failed:")) {
+              progress.completeStep(stepId, {
+                content: output,
+                detail: "Failed",
+              });
+            } else {
+              progress.completeStep(stepId, { content: output });
+            }
+            progress.addStep("Thinking...", { type: "thinking" });
+
+            return output;
           },
         }),
 
@@ -130,6 +149,11 @@ export const codeAgentFunction = inngest.createFunction(
             { files },
             { step, network }: Tool.Options<AgentState>
           ) => {
+            const stepId = progress.addStep("Updating files", {
+              detail: files.map((f) => f.path).join(", "),
+              type: "file",
+            });
+
             // 在沙盒中创建或更新文件
             const newFiles = await step?.run(
               "createOrUpdateFiles",
@@ -152,7 +176,11 @@ export const codeAgentFunction = inngest.createFunction(
 
             if (typeof newFiles === "object") {
               network.state.data.files = newFiles;
+              progress.completeStep(stepId);
+            } else {
+              progress.failStep(stepId, String(newFiles));
             }
+            progress.addStep("Thinking...", { type: "thinking" });
           },
         }),
 
@@ -164,8 +192,12 @@ export const codeAgentFunction = inngest.createFunction(
             filePaths: z.array(z.string()),
           }),
           handler: async ({ filePaths }, { step }) => {
+            const stepId = progress.addStep("Reading files", {
+              detail: filePaths.join(", "),
+              type: "file",
+            });
             // 读取文件内容并返回给ai进行处理
-            return await step?.run("readFiles", async () => {
+            const result = await step?.run("readFiles", async () => {
               try {
                 const sandbox = await getSandbox(sandboxId);
                 const contents = [];
@@ -180,6 +212,19 @@ export const codeAgentFunction = inngest.createFunction(
                 return `Error: ${e}`;
               }
             });
+
+            if (result?.startsWith("Error:")) {
+              progress.failStep(stepId, result);
+            } else {
+              progress.completeStep(stepId, {
+                content:
+                  result && result.length > 500
+                    ? result.slice(0, 500) + "..."
+                    : result,
+              });
+            }
+            progress.addStep("Thinking...", { type: "thinking" });
+            return result;
           },
         }),
       ],
@@ -188,6 +233,13 @@ export const codeAgentFunction = inngest.createFunction(
         // 每次工具调用后触发
         onResponse: async ({ result, network }) => {
           const lastAIMessageText = lastAIMessageTextContent(result);
+
+          if (lastAIMessageText) {
+            progress.updateCurrentStep({
+              content: lastAIMessageText,
+            });
+          }
+
           // 如果AI回复中包含<task_summary>，表示任务结束，则将其保存到network状态中
           if (lastAIMessageText && network) {
             if (lastAIMessageText.includes("<task_summary>")) {
@@ -222,6 +274,9 @@ export const codeAgentFunction = inngest.createFunction(
     // 生成项目标题
     const isFirstConversation = previousMessages.length === 1;
     if (isFirstConversation) {
+      const stepId = progress.addStep("Generating project name...", {
+        type: "thinking",
+      });
       const projectTitleGenerator = createAgent<AgentState>({
         name: "project-title-generator",
         description: "A project title generator",
@@ -232,6 +287,9 @@ export const codeAgentFunction = inngest.createFunction(
       const { output: projectTitleOutput } = await projectTitleGenerator.run(
         event.data.value
       );
+      progress.completeStep(stepId, {
+        content: parseAgentOutput(projectTitleOutput),
+      });
 
       await step.run("update-project-name", async () => {
         const { name } = await prisma.project.update({
@@ -249,7 +307,21 @@ export const codeAgentFunction = inngest.createFunction(
     }
 
     // 让网络自动调用agent完成任务
-    const result = await network.run(event.data.value, { state });
+    progress.addStep("Thinking...", { type: "thinking" });
+    const result = await network.run(event.data.value, {
+      state,
+      streaming: {
+        publish: async (chunk: AgentMessageChunk) => {
+          console.log("chunk:", chunk);
+          if (
+            chunk.event === "text.delta" &&
+            typeof chunk.data.content === "string"
+          ) {
+            progress.appendContent(chunk.data.content);
+          }
+        },
+      },
+    });
 
     const fragmentTitleGenerator = createAgent<AgentState>({
       name: "fragment-title-generator",
@@ -265,12 +337,23 @@ export const codeAgentFunction = inngest.createFunction(
       model: createModelInstance("LongCat-Flash-Chat"),
     });
 
+    const fragmentStepId = progress.addStep("Generating fragment title...", {
+      type: "thinking",
+    });
     const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(
       result.state.data.summary
     );
+    progress.completeStep(fragmentStepId, { content: "Done" });
+
+    const responseStepId = progress.addStep("Generating final response...", {
+      type: "thinking",
+    });
     const { output: responseOutput } = await responseGenerator.run(
       result.state.data.summary
     );
+    progress.completeStep(responseStepId, {
+      content: parseAgentOutput(responseOutput),
+    });
 
     const isError =
       !result.state.data.summary ||
@@ -278,6 +361,7 @@ export const codeAgentFunction = inngest.createFunction(
 
     // 获取沙盒url
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
+      progress.addStep("Generating sandbox URL...", { type: "default" });
       const sandbox = await getSandbox(sandboxId);
       const host = sandbox.getHost(3000);
       return `https://${host}`;
@@ -285,6 +369,7 @@ export const codeAgentFunction = inngest.createFunction(
 
     // 将数据保存到数据库中
     await step.run("save-result", async () => {
+      progress.addStep("Saving result...", { type: "default" });
       if (isError) {
         const message = await prisma.message.create({
           data: {
