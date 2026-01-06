@@ -9,6 +9,7 @@ import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
 import { useSSE } from "@/hooks/use-sse";
 import { useTRPC } from "@/trpc/client";
 import type { Fragment } from "@/generated/prisma/client";
+import type { ProcessingProgress } from "@/types/progress";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -36,7 +37,8 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
 
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabState, setTabState] = useState<"preview" | "code">("preview");
-  // const [isGenerating, setIsGenerating] = useState(false);
+  const [progress, setProgress] = useState<ProcessingProgress | null>(null);
+
   const { has } = useAuth();
   const hasProAccess = has?.({ plan: "pro" });
   const trpc = useTRPC();
@@ -51,9 +53,14 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
           trpc.projects.getOne.queryOptions({ id: projectId })
         );
       } else if (data.type === "message_created") {
+        // 应用生成完毕
+        setProgress(null);
         queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId })
         );
+      } else if (data.type === "progress_update" && data.progress) {
+        // 进度更新
+        setProgress(data.progress);
       }
     },
   });
@@ -77,6 +84,7 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
                 projectId={projectId}
                 activeFragment={activeFragment}
                 setActiveFragment={setActiveFragment}
+                progress={progress}
               />
             </Suspense>
           </ErrorBoundary>

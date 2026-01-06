@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { ProcessingStatus } from "./processing-status";
+import type { ProcessingProgress } from "@/types/progress";
 
 // 循环显示加载消息
 const ShimmerMessages = () => {
@@ -36,7 +38,11 @@ const ShimmerMessages = () => {
   );
 };
 
-export const MessageLoading = () => {
+export const MessageLoading = ({
+  progress,
+}: {
+  progress?: ProcessingProgress | null;
+}) => {
   return (
     <div className="flex flex-col group px-2 pb-4">
       <div className="flex items-center gap-2 pl-2 mb-2">
@@ -49,8 +55,12 @@ export const MessageLoading = () => {
         />
         <span className="text-sm font-medium">Evoke</span>
       </div>
-      <div className="pl-8.5 flex flex-col gap-y-4">
-        <ShimmerMessages />
+      <div className="ml-8">
+        {progress && progress.steps.length > 0 ? (
+          <ProcessingStatus steps={progress.steps} />
+        ) : (
+          <ShimmerMessages />
+        )}
       </div>
     </div>
   );
