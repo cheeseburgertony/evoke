@@ -39,7 +39,7 @@ export const codeAgentFunction = inngest.createFunction(
   async ({ event, step }) => {
     const projectId = event.data.projectId;
     const progress = new ProgressManager(projectId);
-    progress.addStep("Analyzing request...", { type: "thinking" });
+    progress.addStep("analyzingRequest", { type: "thinking" });
 
     // 获取沙盒id
     const sandboxId = await step.run("get-sandbox-id", async () => {
@@ -94,7 +94,7 @@ export const codeAgentFunction = inngest.createFunction(
             command: z.string(),
           }),
           handler: async ({ command }, { step }) => {
-            const stepId = progress.addStep("Executing command", {
+            const stepId = progress.addStep("executingCommand", {
               detail: command,
               type: "command",
             });
@@ -122,12 +122,12 @@ export const codeAgentFunction = inngest.createFunction(
             if (output?.startsWith("Command failed:")) {
               progress.completeStep(stepId, {
                 content: output,
-                detail: "Failed",
+                detail: "failed",
               });
             } else {
               progress.completeStep(stepId, { content: output });
             }
-            progress.addStep("Thinking...", { type: "thinking" });
+            progress.addStep("thinking", { type: "thinking" });
 
             return output;
           },
@@ -149,7 +149,7 @@ export const codeAgentFunction = inngest.createFunction(
             { files },
             { step, network }: Tool.Options<AgentState>
           ) => {
-            const stepId = progress.addStep("Updating files", {
+            const stepId = progress.addStep("updatingFiles", {
               detail: files.map((f) => f.path).join(", "),
               type: "file",
             });
@@ -180,7 +180,7 @@ export const codeAgentFunction = inngest.createFunction(
             } else {
               progress.failStep(stepId, String(newFiles));
             }
-            progress.addStep("Thinking...", { type: "thinking" });
+            progress.addStep("thinking", { type: "thinking" });
           },
         }),
 
@@ -192,7 +192,7 @@ export const codeAgentFunction = inngest.createFunction(
             filePaths: z.array(z.string()),
           }),
           handler: async ({ filePaths }, { step }) => {
-            const stepId = progress.addStep("Reading files", {
+            const stepId = progress.addStep("readingFiles", {
               detail: filePaths.join(", "),
               type: "file",
             });
@@ -223,7 +223,7 @@ export const codeAgentFunction = inngest.createFunction(
                     : result,
               });
             }
-            progress.addStep("Thinking...", { type: "thinking" });
+            progress.addStep("thinking", { type: "thinking" });
             return result;
           },
         }),
@@ -274,7 +274,7 @@ export const codeAgentFunction = inngest.createFunction(
     // 生成项目标题
     const isFirstConversation = previousMessages.length === 1;
     if (isFirstConversation) {
-      const stepId = progress.addStep("Generating project name...", {
+      const stepId = progress.addStep("generatingProjectName", {
         type: "thinking",
       });
       const projectTitleGenerator = createAgent<AgentState>({
@@ -307,7 +307,7 @@ export const codeAgentFunction = inngest.createFunction(
     }
 
     // 让网络自动调用agent完成任务
-    progress.addStep("Thinking...", { type: "thinking" });
+    progress.addStep("thinking", { type: "thinking" });
     const result = await network.run(event.data.value, {
       state,
       streaming: {
@@ -337,15 +337,15 @@ export const codeAgentFunction = inngest.createFunction(
       model: createModelInstance("LongCat-Flash-Chat"),
     });
 
-    const fragmentStepId = progress.addStep("Generating fragment title...", {
+    const fragmentStepId = progress.addStep("generatingFragmentTitle", {
       type: "thinking",
     });
     const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(
       result.state.data.summary
     );
-    progress.completeStep(fragmentStepId, { content: "Done" });
+    progress.completeStep(fragmentStepId, { content: "done" });
 
-    const responseStepId = progress.addStep("Generating final response...", {
+    const responseStepId = progress.addStep("generatingFinalResponse", {
       type: "thinking",
     });
     const { output: responseOutput } = await responseGenerator.run(
@@ -361,7 +361,7 @@ export const codeAgentFunction = inngest.createFunction(
 
     // 获取沙盒url
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
-      progress.addStep("Generating sandbox URL...", { type: "default" });
+      progress.addStep("generatingSandboxUrl", { type: "default" });
       const sandbox = await getSandbox(sandboxId);
       const host = sandbox.getHost(3000);
       return `https://${host}`;
@@ -369,12 +369,12 @@ export const codeAgentFunction = inngest.createFunction(
 
     // 将数据保存到数据库中
     await step.run("save-result", async () => {
-      progress.addStep("Saving result...", { type: "default" });
+      progress.addStep("savingResult", { type: "default" });
       if (isError) {
         const message = await prisma.message.create({
           data: {
             projectId,
-            content: "出现了一些错误，请再试一次。",
+            content: "Functions.error",
             role: "ASSISTANT",
             type: "ERROR",
           },
