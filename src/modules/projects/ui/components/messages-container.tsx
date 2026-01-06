@@ -7,17 +7,20 @@ import type { Fragment } from "@/generated/prisma/client";
 import { MessageCard } from "./message-card";
 import { MessageForm } from "./message-form";
 import { MessageLoading } from "./message-loading";
+import type { ProcessingProgress } from "@/types/progress";
 
 interface IMessagesContainerProps {
   projectId: string;
   activeFragment: Fragment | null;
   setActiveFragment: (fragment: Fragment | null) => void;
+  progress: ProcessingProgress | null;
 }
 
 export const MessagesContainer = ({
   projectId,
   activeFragment,
   setActiveFragment,
+  progress,
 }: IMessagesContainerProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastAIMessageIdRef = useRef<string | null>(null);
@@ -44,8 +47,8 @@ export const MessagesContainer = ({
   }, [messages, setActiveFragment]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView();
-  }, [messages.length]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages.length, progress]);
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
@@ -63,7 +66,7 @@ export const MessagesContainer = ({
               onFragmentClick={() => setActiveFragment(message.fragment)}
             />
           ))}
-          {isUserLastMessage && <MessageLoading />}
+          {isUserLastMessage && <MessageLoading progress={progress} />}
           <div ref={bottomRef} />
         </div>
       </div>
