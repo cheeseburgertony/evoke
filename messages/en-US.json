@@ -80,6 +80,22 @@
     "optimizing": "Optimizing layout...",
     "thinking": "Thinking..."
   },
+  "ProcessingStatus": {
+    "viewOutput": "View output",
+    "viewThoughtProcess": "View thought process",
+    "analyzingRequest": "Analyzing request...",
+    "executingCommand": "Executing command",
+    "updatingFiles": "Updating files",
+    "readingFiles": "Reading files",
+    "generatingProjectName": "Generating project name...",
+    "thinking": "Thinking...",
+    "done": "Done",
+    "generatingFragmentTitle": "Generating fragment title...",
+    "generatingFinalResponse": "Generating final response...",
+    "generatingSandboxUrl": "Generating sandbox URL...",
+    "savingResult": "Saving result...",
+    "failed": "Failed"
+  },
   "Navbar": {
     "signIn": "Sign In",
     "signUp": "Sign Up",

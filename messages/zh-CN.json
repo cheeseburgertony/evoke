@@ -80,6 +80,22 @@
     "optimizing": "优化布局中...",
     "thinking": "思考中..."
   },
+  "ProcessingStatus": {
+    "viewOutput": "查看输出",
+    "viewThoughtProcess": "查看思考过程",
+    "analyzingRequest": "正在分析请求...",
+    "executingCommand": "执行命令",
+    "updatingFiles": "更新文件",
+    "readingFiles": "读取文件",
+    "generatingProjectName": "生成项目名称...",
+    "thinking": "思考中...",
+    "done": "完成",
+    "generatingFragmentTitle": "生成片段标题...",
+    "generatingFinalResponse": "生成最终响应...",
+    "generatingSandboxUrl": "生成沙盒 URL...",
+    "savingResult": "保存结果...",
+    "failed": "失败"
+  },
   "Navbar": {
     "signIn": "登录",
     "signUp": "注册",

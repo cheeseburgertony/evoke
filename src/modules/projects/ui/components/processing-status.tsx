@@ -12,6 +12,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { ProgressStep } from "@/types/progress";
 import {
@@ -39,14 +40,22 @@ export const ProcessingStatus = ({ steps }: IProcessingStatusProps) => {
 
 // 单个状态项
 const StatusItem = ({ step }: { step: ProgressStep }) => {
+  const t = useTranslations("ProcessingStatus");
   const [isOpen, setIsOpen] = useState(false);
   const isThinking = step.type === "thinking";
   const hasContent = !!step.content;
 
+  const translateKey = (key?: string) => {
+    if (!key) return null;
+    return t.has(key) ? t(key) : key;
+  };
+
   const getIcon = () => {
     switch (step.status) {
       case "in-progress":
-        return <Loader2Icon className="h-4.5 w-4.5 animate-spin text-blue-500" />;
+        return (
+          <Loader2Icon className="h-4.5 w-4.5 animate-spin text-blue-500" />
+        );
       case "completed":
         return <CheckCircle2Icon className="h-4.5 w-4.5 text-green-500" />;
       case "error":
@@ -87,11 +96,11 @@ const StatusItem = ({ step }: { step: ProgressStep }) => {
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium flex items-center">
               {getStepIcon()}
-              {step.label}
+              {translateKey(step.label)}
             </span>
             {step.detail && (
               <span className="text-xs text-muted-foreground truncate font-mono bg-muted/50 px-1.5 py-0.5 rounded">
-                {step.detail}
+                {translateKey(step.detail)}
               </span>
             )}
             {previewText && !isOpen && (
@@ -114,12 +123,14 @@ const StatusItem = ({ step }: { step: ProgressStep }) => {
                   ) : (
                     <ChevronRightIcon className="h-3 w-3" />
                   )}
-                  {isThinking ? "View thought process" : "View output"}
+                  {isThinking ? t("viewThoughtProcess") : t("viewOutput")}
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="mt-2 text-xs bg-muted/30 p-2 rounded-md font-mono overflow-x-auto whitespace-pre-wrap max-h-[200px] overflow-y-auto">
-                  {step.content}
+                  {step.content === "done"
+                    ? translateKey("done")
+                    : step.content}
                 </div>
               </CollapsibleContent>
             </Collapsible>
