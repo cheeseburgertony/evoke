@@ -3,7 +3,6 @@ import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { sseManager } from "@/lib/sse-manager";
 
-export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
 export async function GET(
@@ -53,7 +52,7 @@ export async function GET(
         } catch {
           clearInterval(heartbeat);
         }
-      }, 5000);
+      }, 30000);
 
       // 清理函数
       request.signal.addEventListener("abort", () => {
