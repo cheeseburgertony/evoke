@@ -45,7 +45,7 @@ export const ProjectList = () => {
             asChild
           >
             <Link href={`/projects/${project.id}`}>
-              <div className="flex items-center gap-x-4">
+              <div className="flex items-center gap-x-4 w-full">
                 <Image
                   src="/logo.svg"
                   alt="Evoke"
@@ -53,7 +53,7 @@ export const ProjectList = () => {
                   height={32}
                   className="object-contain"
                 />
-                <div className="flex flex-col">
+                <div className="flex flex-col min-w-0 flex-1">
                   <h3 className="truncate font-medium">{project.name}</h3>
                   <p className="text-sm text-muted-foreground">
                     {formatDistanceToNow(project.updatedAt, {
