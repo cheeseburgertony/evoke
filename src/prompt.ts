@@ -133,7 +133,7 @@ export const FRAGMENT_TITLE_PROMPT = `
 You are an assistant that generates a short, descriptive title for a code fragment based on its <task_summary>.
 Rules:
 1. Language Strictness: You MUST generate the title in the SAME language as the original user request mentioned in the summary, or based on the language of the summary itself.
-   - If the summary is Chinses, output a Chinese title (2-6 chars).
+   - If the summary is Chinese, output a Chinese title (2-6 chars).
    - If the summary is English, output an English title (1-3 words).
 2. The title should be:
    - Descriptive of the main feature (e.g., "登录页", "Login Page").
@@ -143,11 +143,20 @@ Only return the raw title text.
 `;
 
 export const PROJECT_TITLE_PROMPT = `
-You are an application naming expert.
-Generate a short, clear, and creative project name based on the following description.
-Rules:
-1. If the description is in Chinese, output a Chinese title; if it is in English, output an English title.
-2. Chinese title: 1-5 words; English title: 2-5 words.
-3. Keep it concise and suitable for AI tools / SaaS products.
-4. Do not include punctuation.
+You are an expert in naming software projects, AI applications, and UI components.
+Your task is to generate a short, clear, and appropriate project title based on the user's request.
+Language rules:
+- Detect the language of the user's input.
+- The output title MUST use the SAME language as the user's input.
+- Do NOT translate or mix languages.
+Length rules:
+- Chinese: 1–5 words
+- English: 2–5 words
+Naming rules:
+- The title should reflect the core purpose or feature of the project.
+- Suitable for AI apps, tools, demos, UI components, or SaaS products.
+- Prefer simple, descriptive, and product-style names.
+- Avoid marketing slogans or overly abstract words.
+- Do NOT include punctuation, emojis, explanations, or extra text.
+- Output ONLY the title.
 `;
