@@ -281,7 +281,7 @@ export const codeAgentFunction = inngest.createFunction(
         name: "project-title-generator",
         description: "A project title generator",
         system: PROJECT_TITLE_PROMPT,
-        model: createModelInstance("LongCat-Flash-Chat"),
+        model: createModelInstance("LongCat-Flash-Chat", 0.4),
       });
 
       const { output: projectTitleOutput } = await projectTitleGenerator.run(
@@ -314,14 +314,14 @@ export const codeAgentFunction = inngest.createFunction(
       name: "fragment-title-generator",
       description: "A fragment title generator",
       system: FRAGMENT_TITLE_PROMPT,
-      model: createModelInstance("LongCat-Flash-Chat"),
+      model: createModelInstance("LongCat-Flash-Chat", 0.1),
     });
 
     const responseGenerator = createAgent<AgentState>({
       name: "response-generator",
       description: "A response title generator",
       system: RESPONSE_PROMPT,
-      model: createModelInstance("LongCat-Flash-Chat"),
+      model: createModelInstance("LongCat-Flash-Chat", 0.6),
     });
 
     const fragmentStepId = progress.addStep("generatingFragmentTitle", {
