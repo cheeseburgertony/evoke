@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ChevronDownIcon, ChevronLeftIcon, SunMoonIcon } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
+import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -37,6 +39,28 @@ export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
   );
   const { theme, setTheme } = useTheme();
 
+  const [isTruncated, setIsTruncated] = useState(false);
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const checkTruncation = () => {
+      const element = textRef.current;
+      if (element) {
+        setIsTruncated(element.scrollWidth > element.clientWidth);
+      }
+    };
+
+    checkTruncation();
+    window.addEventListener("resize", checkTruncation);
+    return () => window.removeEventListener("resize", checkTruncation);
+  }, [project.name]);
+
+  const ProjectName = (
+    <span ref={textRef} className="text-sm font-medium truncate max-w-[120px]">
+      {project.name}
+    </span>
+  );
+
   return (
     <header className="p-2 flex justify-between items-center border-b">
       <DropdownMenu>
@@ -47,7 +71,13 @@ export const ProjectHeader = ({ projectId }: IProjectHeaderProps) => {
             className="focus:visible:ring-0 hover:bg-transparent hover:opacity-75 transition-opacity pl-2!"
           >
             <Image src="/logo.svg" alt="Evoke" width={18} height={18} />
-            <span className="text-sm font-medium">{project.name}</span>
+            {isTruncated ? (
+              <Hint text={project.name} side="bottom">
+                {ProjectName}
+              </Hint>
+            ) : (
+              ProjectName
+            )}
             <ChevronDownIcon />
           </Button>
         </DropdownMenuTrigger>
