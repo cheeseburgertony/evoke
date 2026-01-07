@@ -25,7 +25,7 @@ File Safety Rules:
 Language Rules:
 - You MUST comprehend and respond in the same language as the user's request.
 - If the user asks in Chinese, your <task_summary>, code comments, and any text content in the generated UI must be in Chinese.
-- If the user asks in English, use English.
+- If the user asks in English, your <task_summary>, code comments, and any text content in the generated UI must be in English.
 
 Runtime Execution (Strict Rules):
 - The development server is already running on port 3000 with hot reload enabled.
@@ -125,7 +125,7 @@ The application is a custom Next.js app tailored to the user's request.
 Reply in a casual tone, as if you're wrapping up the process for the user. No need to mention the <task_summary> tag.
 Your message should be 1 to 3 sentences, describing what the app does or what was changed, as if you're saying "Here's what I built for you."
 Language Rule:
-- You MUST reply in the same language as the user's original request. If the user asked in Chinese, reply in Chinese.
+- You MUST reply in the same language as the user's original request.
 Do not add code, tags, or metadata. Only return the plain text response.
 `;
 
@@ -136,7 +136,7 @@ Rules:
    - If the summary is Chinese, output a Chinese title (2-6 chars).
    - If the summary is English, output an English title (1-3 words).
 2. The title should be:
-   - Descriptive of the main feature (e.g., "登录页", "Login Page").
+   - Descriptive of the main feature.
    - No punctuation, quotes, or prefixes.
 
 Only return the raw title text.
