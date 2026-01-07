@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
-import { Suspense, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
@@ -39,6 +39,7 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabState, setTabState] = useState<"preview" | "code">("preview");
   const [progress, setProgress] = useState<ProcessingProgress | null>(null);
+  const ignoreProgressRef = useRef(false);
 
   const { has } = useAuth();
   const hasProAccess = has?.({ plan: "pro" });
@@ -55,13 +56,20 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
         );
       } else if (data.type === "message_created") {
         // 应用生成完毕
+        ignoreProgressRef.current = true;
         setProgress(null);
         queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId })
         );
+        // 2秒后恢复接收进度更新，防止因网络延迟导致的旧进度包覆盖完成状态
+        setTimeout(() => {
+          ignoreProgressRef.current = false;
+        }, 2000);
       } else if (data.type === "progress_update" && data.progress) {
-        // 进度更新
-        setProgress(data.progress);
+        // 进度更新，如果处于忽略期则跳过
+        if (!ignoreProgressRef.current) {
+          setProgress(data.progress);
+        }
       }
     },
   });
@@ -122,10 +130,10 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
               </div>
             </div>
             <TabsContent value="preview" className="flex-1 min-h-0 relative">
-              {!!activeFragment ? (
-                <FragmentWeb data={activeFragment} />
-              ) : progress ? (
+              {progress ? (
                 <PreviewLoading />
+              ) : !!activeFragment ? (
+                <FragmentWeb data={activeFragment} />
               ) : (
                 <div className="h-full flex items-center justify-center text-muted-foreground/40">
                   <EyeIcon className="h-16 w-16" />
