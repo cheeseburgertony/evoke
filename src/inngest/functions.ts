@@ -94,10 +94,6 @@ export const codeAgentFunction = inngest.createFunction(
             command: z.string(),
           }),
           handler: async ({ command }, { step }) => {
-            const stepId = progress.addStep("executingCommand", {
-              detail: command,
-              type: "command",
-            });
             const output = await step?.run("terminal", async () => {
               const buffers = { stdout: "", stderr: "" };
 
@@ -119,16 +115,6 @@ export const codeAgentFunction = inngest.createFunction(
               }
             });
 
-            if (output?.startsWith("Command failed:")) {
-              progress.completeStep(stepId, {
-                content: output,
-                detail: "failed",
-              });
-            } else {
-              progress.completeStep(stepId, { content: output });
-            }
-            progress.addStep("thinking", { type: "thinking" });
-
             return output;
           },
         }),
@@ -149,11 +135,6 @@ export const codeAgentFunction = inngest.createFunction(
             { files },
             { step, network }: Tool.Options<AgentState>
           ) => {
-            const stepId = progress.addStep("updatingFiles", {
-              detail: files.map((f) => f.path).join(", "),
-              type: "file",
-            });
-
             // 在沙盒中创建或更新文件
             const newFiles = await step?.run(
               "createOrUpdateFiles",
@@ -176,11 +157,7 @@ export const codeAgentFunction = inngest.createFunction(
 
             if (typeof newFiles === "object") {
               network.state.data.files = newFiles;
-              progress.completeStep(stepId);
-            } else {
-              progress.failStep(stepId, String(newFiles));
             }
-            progress.addStep("thinking", { type: "thinking" });
           },
         }),
 
@@ -192,10 +169,6 @@ export const codeAgentFunction = inngest.createFunction(
             filePaths: z.array(z.string()),
           }),
           handler: async ({ filePaths }, { step }) => {
-            const stepId = progress.addStep("readingFiles", {
-              detail: filePaths.join(", "),
-              type: "file",
-            });
             // 读取文件内容并返回给ai进行处理
             const result = await step?.run("readFiles", async () => {
               try {
@@ -213,17 +186,6 @@ export const codeAgentFunction = inngest.createFunction(
               }
             });
 
-            if (result?.startsWith("Error:")) {
-              progress.failStep(stepId, result);
-            } else {
-              progress.completeStep(stepId, {
-                content:
-                  result && result.length > 500
-                    ? result.slice(0, 500) + "..."
-                    : result,
-              });
-            }
-            progress.addStep("thinking", { type: "thinking" });
             return result;
           },
         }),
@@ -233,12 +195,6 @@ export const codeAgentFunction = inngest.createFunction(
         // 每次工具调用后触发
         onResponse: async ({ result, network }) => {
           const lastAIMessageText = lastAIMessageTextContent(result);
-
-          if (lastAIMessageText) {
-            progress.updateCurrentStep({
-              content: lastAIMessageText,
-            });
-          }
 
           // 如果AI回复中包含<task_summary>，表示任务结束，则将其保存到network状态中
           if (lastAIMessageText && network) {
@@ -285,7 +241,19 @@ export const codeAgentFunction = inngest.createFunction(
       });
 
       const { output: projectTitleOutput } = await projectTitleGenerator.run(
-        event.data.value
+        event.data.value,
+        {
+          streaming: {
+            publish: async (chunk: AgentMessageChunk) => {
+              if (
+                chunk.event === "text.delta" &&
+                typeof chunk.data.content === "string"
+              ) {
+                progress.appendContent(chunk.data.content);
+              }
+            },
+          },
+        }
       );
       progress.completeStep(stepId, {
         content: parseAgentOutput(projectTitleOutput),
@@ -306,9 +274,85 @@ export const codeAgentFunction = inngest.createFunction(
       });
     }
 
+    let toolCallStepId: string | null = null;
     // 让网络自动调用agent完成任务
     progress.addStep("thinking", { type: "thinking" });
-    const result = await network.run(event.data.value, { state });
+    const result = await network.run(event.data.value, {
+      state,
+      streaming: {
+        publish: async (chunk: AgentMessageChunk) => {
+          // 处理文本流（思考中）
+          if (
+            chunk.event === "text.delta" &&
+            typeof chunk.data.content === "string"
+          ) {
+            progress.appendContent(chunk.data.content);
+          }
+
+          // 识别到工具调用，添加对应步骤
+          if (
+            chunk.event === "part.completed" &&
+            chunk.data.type === "tool-call"
+          ) {
+            const toolName = (chunk.data.metadata as { toolName?: string })
+              ?.toolName;
+            const args = chunk.data.finalContent as {
+              command?: string;
+              files?: { path: string }[];
+              filePaths?: string[];
+            };
+
+            if (toolName === "terminal" && args.command) {
+              toolCallStepId = progress.addStep("executingCommand", {
+                detail: args.command,
+                type: "command",
+              });
+            } else if (toolName === "createOrUpdateFiles" && args.files) {
+              const files = args.files.map((f) => f.path).join(", ");
+              toolCallStepId = progress.addStep("updatingFiles", {
+                detail: files,
+                type: "file",
+              });
+            } else if (toolName === "readFiles" && args.filePaths) {
+              const files = args.filePaths.join(", ");
+              toolCallStepId = progress.addStep("readingFiles", {
+                detail: files,
+                type: "file",
+              });
+            }
+          }
+
+          // 工具调用完成，更新对应步骤状态
+          if (
+            chunk.event === "part.completed" &&
+            chunk.data.type === "tool-output"
+          ) {
+            const result = chunk.data.finalContent as {
+              data?: string | object;
+            };
+            const output =
+              typeof result?.data === "string"
+                ? result.data
+                : JSON.stringify(result);
+
+            if (toolCallStepId) {
+              if (
+                output.startsWith("Command failed:") ||
+                output.startsWith("Error:")
+              ) {
+                progress.failStep(toolCallStepId, output);
+              } else {
+                const content =
+                  output.length > 500 ? output.slice(0, 500) + "..." : output;
+                progress.completeStep(toolCallStepId, { content });
+              }
+              toolCallStepId = null;
+            }
+            progress.addStep("thinking", { type: "thinking" });
+          }
+        },
+      },
+    });
 
     const fragmentTitleGenerator = createAgent<AgentState>({
       name: "fragment-title-generator",
