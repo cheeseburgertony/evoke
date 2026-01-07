@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import type { ProgressStep } from "@/types/progress";
+import { PROGRESS_CONTENT_DONE, type ProgressStep } from "@/types/progress";
 import {
   Collapsible,
   CollapsibleContent,
@@ -128,7 +128,7 @@ const StatusItem = ({ step }: { step: ProgressStep }) => {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="mt-2 text-xs bg-muted/30 p-2 rounded-md font-mono overflow-x-auto whitespace-pre-wrap max-h-[200px] overflow-y-auto">
-                  {step.content === "done"
+                  {step.content === PROGRESS_CONTENT_DONE
                     ? translateKey("done")
                     : step.content}
                 </div>

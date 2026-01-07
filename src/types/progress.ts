@@ -1,6 +1,8 @@
 type StepStatus = "pending" | "in-progress" | "completed" | "error";
 type StepType = "default" | "thinking" | "command" | "file";
 
+export const PROGRESS_CONTENT_DONE = "done" as const;
+
 export interface ProgressStep {
   id: string;
   label: string;
