@@ -308,19 +308,7 @@ export const codeAgentFunction = inngest.createFunction(
 
     // 让网络自动调用agent完成任务
     progress.addStep("thinking", { type: "thinking" });
-    const result = await network.run(event.data.value, {
-      state,
-      streaming: {
-        publish: async (chunk: AgentMessageChunk) => {
-          if (
-            chunk.event === "text.delta" &&
-            typeof chunk.data.content === "string"
-          ) {
-            progress.appendContent(chunk.data.content);
-          }
-        },
-      },
-    });
+    const result = await network.run(event.data.value, { state });
 
     const fragmentTitleGenerator = createAgent<AgentState>({
       name: "fragment-title-generator",

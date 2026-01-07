@@ -10,13 +10,6 @@ export class ProgressManager {
   /** 关联的项目ID */
   private projectId: string;
 
-  /** 上次发送事件的时间戳 */
-  private lastEmitTime = 0;
-  /** 发送事件的定时器 */
-  private emitTimeout: NodeJS.Timeout | null = null;
-  /** 节流间隔，防止闪烁 */
-  private throttleInterval = 200;
-
   constructor(projectId: string) {
     this.projectId = projectId;
   }
@@ -30,10 +23,6 @@ export class ProgressManager {
       type?: ProgressStep["type"];
     }
   ) {
-    if (this.emitTimeout) {
-      clearTimeout(this.emitTimeout);
-      this.emitTimeout = null;
-    }
     // 完成之前所有的进行中步骤，过滤掉空的“思考”步骤以防止闪烁
     this.steps = this.steps.filter((s) => {
       if (s.status === "in-progress") {
@@ -59,9 +48,7 @@ export class ProgressManager {
 
     // 加入步骤列表
     this.steps.push(newStep);
-    // 不要立即发送“thinking”类型的步骤，以防止它们被短时间内移除时造成闪烁
-    const immediate = options?.type !== "thinking";
-    this.emit(immediate);
+    this.emit();
     return newStep.id;
   }
 
@@ -73,12 +60,7 @@ export class ProgressManager {
     const step = this.steps.find((s) => s.id === id);
     if (step) {
       Object.assign(step, updates);
-      if (updates.status) {
-        // 状态更新时立即发送，其他的则节流发送
-        this.emit(true);
-      } else {
-        this.emit();
-      }
+      this.emit();
     }
   }
 
@@ -117,23 +99,7 @@ export class ProgressManager {
   }
 
   /** 触发进度更新事件 */
-  private emit(immediate = false) {
-    const now = Date.now();
-    if (immediate || now - this.lastEmitTime >= this.throttleInterval) {
-      this.send();
-    } else {
-      if (!this.emitTimeout) {
-        this.emitTimeout = setTimeout(() => {
-          this.emitTimeout = null;
-          this.send();
-        }, this.throttleInterval - (now - this.lastEmitTime));
-      }
-    }
-  }
-
-  /** 发送进度更新事件 */
-  private send() {
-    this.lastEmitTime = Date.now();
+  private emit() {
     sseManager.sendEvent(this.projectId, {
       type: "progress_update",
       progress: {

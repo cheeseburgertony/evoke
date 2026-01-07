@@ -147,11 +147,7 @@ You are an application naming expert.
 Generate a short, clear, and creative project name based on the following description.
 Rules:
 1. If the description is in Chinese, output a Chinese title; if it is in English, output an English title.
-2. The name should be clear and descriptive about what the app does, but still sound modern.
-3. Balance between creativity and clarity. Avoid being too abstract.
-   - Good: "Fast Image Host", "Smart Todo", "Fireworks Workshop"
-   - Bad: "Cloud Dream" (too abstract), "Todo Management System v1" (too boring)
-4. Uniqueness: Each time you run, try to generate a DIFFERENT name than common defaults. Be imaginative with synonyms.
-5. Chinese title: 2-6 chars; English title: 1-3 words.
-6. Do not include punctuation.
+2. Chinese title: 1-5 words; English title: 2-5 words.
+3. Keep it concise and suitable for AI tools / SaaS products.
+4. Do not include punctuation.
 `;
