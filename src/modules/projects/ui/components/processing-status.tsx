@@ -94,12 +94,12 @@ const StatusItem = ({ step }: { step: ProgressStep }) => {
         <div className="mt-0.5 shrink-0">{getIcon()}</div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium flex items-center">
-              {getStepIcon()}
+            <span className="text-sm font-medium flex items-center shrink-0">
+              <span className="shrink-0">{getStepIcon()}</span>
               {translateKey(step.label)}
             </span>
             {step.detail && (
-              <span className="text-xs text-muted-foreground truncate font-mono bg-muted/50 px-1.5 py-0.5 rounded">
+              <span className="text-xs text-muted-foreground truncate font-mono bg-muted/50 px-1.5 py-0.5 rounded max-w-[200px]">
                 {translateKey(step.detail)}
               </span>
             )}
