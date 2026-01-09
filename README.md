@@ -5,6 +5,24 @@
 <h1 align="center">Evoke</h1>
 
 <p align="center">
+  <a href="https://nextjs.org">
+    <img src="https://img.shields.io/badge/Next.js_16-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js">
+  </a>
+  <a href="https://www.typescriptlang.org">
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  </a>
+  <a href="https://tailwindcss.com">
+    <img src="https://img.shields.io/badge/Tailwind_CSS_4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  </a>
+  <a href="https://www.prisma.io">
+    <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma">
+  </a>
+  <a href="https://www.inngest.com">
+    <img src="https://img.shields.io/badge/Inngest-SDK-000000?style=for-the-badge&logo=inngest&logoColor=white" alt="Inngest">
+  </a>
+</p>
+
+<p align="center">
   AI 驱动的代码生成平台 | AI-Powered Code Generation Platform
 </p>
 
@@ -23,9 +41,26 @@ Evoke 是一个 AI 驱动的代码生成平台，通过自然语言对话将你�
 
 ### 演示截图
 
-![首页](screenshots/home.png)
-![工作区](screenshots/workspace.png)
-![代码浏览器](screenshots/code-explorer.png)
+<p align="center">
+  <img src="screenshots/home.png" alt="首页" width="100%" style="border-radius: 10px; margin-bottom: 20px;">
+</p>
+
+<table align="center" style="border: none;">
+  <tr>
+    <td align="center" width="33%">
+      <img src="screenshots/generating.png" alt="生成工作区" style="border-radius: 8px; width: 100%;">
+      <br/><sub>✨ 智能编排生成</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/workspace.png" alt="工作区" style="border-radius: 8px; width: 100%;">
+      <br/><sub>💻 交互式工作区</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/code-explorer.png" alt="代码浏览器" style="border-radius: 8px; width: 100%;">
+      <br/><sub>📝 透明代码访问</sub>
+    </td>
+  </tr>
+</table>
 
 ### 功能特性
 
@@ -77,7 +112,13 @@ npm install
 
 3. 配置环境变量
 
-编辑 `.env` 文件，填入以下配置：
+复制示例配置文件：
+
+```bash
+cp .env.example .env
+```
+
+或者手动编辑 `.env` 文件，填入以下配置：
 
 ```env
 # 数据库
@@ -168,17 +209,26 @@ Evoke is an AI-powered code generation platform that transforms your ideas into 
 
 ### Screenshots
 
-<!--
-Required screenshots:
-1. screenshots/home.png - Homepage (navbar, input field, template buttons, dynamic background)
-2. screenshots/workspace.png - Workspace (left: chat, right: preview, top: tabs)
-3. screenshots/code-explorer.png - Code explorer (file tree, syntax highlighting)
-Recommended size: 1920x1080 or 1280x720
--->
+<p align="center">
+  <img src="screenshots/home-en.png" alt="Home" width="100%" style="border-radius: 10px; margin-bottom: 20px;">
+</p>
 
-![Home](screenshots/home.png)
-![Workspace](screenshots/workspace.png)
-![Code Explorer](screenshots/code-explorer.png)
+<table align="center" style="border: none;">
+  <tr>
+    <td align="center" width="33%">
+      <img src="screenshots/generating-en.png" alt="Generating Workspace" style="border-radius: 8px; width: 100%;">
+      <br/><sub>✨ Intelligent Generation</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/workspace-en.png" alt="Workspace" style="border-radius: 8px; width: 100%;">
+      <br/><sub>💻 Interactive Workspace</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/code-explorer-en.png" alt="Code Explorer" style="border-radius: 8px; width: 100%;">
+      <br/><sub>📝 Code Explorer</sub>
+    </td>
+  </tr>
+</table>
 
 ### Features
 
@@ -230,7 +280,13 @@ npm install
 
 3. Set up environment variables
 
-Edit the `.env` file with the following configuration:
+Copy the example configuration file:
+
+```bash
+cp .env.example .env
+```
+
+Or edit the `.env` file with the following configuration:
 
 ```env
 # Database
