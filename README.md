@@ -5,21 +5,12 @@
 <h1 align="center">Evoke</h1>
 
 <p align="center">
-  <a href="https://nextjs.org">
-    <img src="https://img.shields.io/badge/Next.js_16-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js">
-  </a>
-  <a href="https://www.typescriptlang.org">
-    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
-  </a>
-  <a href="https://tailwindcss.com">
-    <img src="https://img.shields.io/badge/Tailwind_CSS_4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
-  </a>
-  <a href="https://www.prisma.io">
-    <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma">
-  </a>
-  <a href="https://www.inngest.com">
-    <img src="https://img.shields.io/badge/Inngest-SDK-000000?style=for-the-badge&logo=inngest&logoColor=white" alt="Inngest">
-  </a>
+  <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwindcss" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white" alt="Prisma">
+  <img src="https://img.shields.io/badge/Inngest_SDK-000000?style=flat-square&logo=inngest&logoColor=white" alt="Inngest">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
 </p>
 
 <p align="center">
@@ -112,13 +103,7 @@ npm install
 
 3. 配置环境变量
 
-复制示例配置文件：
-
-```bash
-cp .env.example .env
-```
-
-或者手动编辑 `.env` 文件，填入以下配置：
+手动编辑 `.env` 文件，填入以下配置：
 
 ```env
 # 数据库
@@ -280,13 +265,7 @@ npm install
 
 3. Set up environment variables
 
-Copy the example configuration file:
-
-```bash
-cp .env.example .env
-```
-
-Or edit the `.env` file with the following configuration:
+Edit the `.env` file with the following configuration:
 
 ```env
 # Database
