@@ -44,7 +44,7 @@ export async function GET(
       // 安全的发送函数
       const sendEvent = (data: string) => {
         if (isClosed) return; // 防止在关闭后发送
-        
+
         try {
           controller.enqueue(encoder.encode(`data: ${data}\n\n`));
         } catch (error) {
@@ -55,7 +55,6 @@ export async function GET(
       };
 
       sseManager.addConnection(projectId, sendEvent);
-      console.log(`[SSE] Connection established for project ${projectId}`);
 
       // 缩短心跳间隔到15秒
       const heartbeat = setInterval(() => {
@@ -63,25 +62,25 @@ export async function GET(
           clearInterval(heartbeat);
           return;
         }
-        
+
         try {
           controller.enqueue(encoder.encode(`: heartbeat ${Date.now()}\n\n`));
         } catch (error) {
           console.error(`[SSE] Heartbeat failed for ${projectId}:`, error);
-          clearInterval(heartbeat);
           isClosed = true;
+          clearInterval(heartbeat);
+          sseManager.removeConnection(projectId, sendEvent);
         }
-      }, 15000); // 改为15秒
+      }, 15000);
 
       // 清理函数
       const cleanup = () => {
         if (isClosed) return;
         isClosed = true;
-        
+
         clearInterval(heartbeat);
         sseManager.removeConnection(projectId, sendEvent);
-        console.log(`[SSE] Connection closed for project ${projectId}`);
-        
+
         try {
           controller.close();
         } catch (error) {

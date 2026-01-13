@@ -11,7 +11,6 @@ class SSEManager {
       this.connections.set(projectId, new Set());
     }
     this.connections.get(projectId)!.add(sendEvent);
-    console.log(`[SSEManager] Added connection for ${projectId}. Total: ${this.getConnectionCount(projectId)}`);
   }
 
   /**
@@ -23,11 +22,9 @@ class SSEManager {
     const projectConnections = this.connections.get(projectId);
     if (projectConnections) {
       projectConnections.delete(sendEvent);
-      console.log(`[SSEManager] Removed connection for ${projectId}. Remaining: ${projectConnections.size}`);
-      
+
       if (projectConnections.size === 0) {
         this.connections.delete(projectId);
-        console.log(`[SSEManager] No more connections for ${projectId}, cleaned up`);
       }
     }
   }
@@ -39,30 +36,23 @@ class SSEManager {
    */
   sendEvent(projectId: string, data: unknown) {
     const projectConnections = this.connections.get(projectId);
-    const count = projectConnections?.size || 0;
-    
-    console.log(`[SSEManager] Sending event to ${projectId}. Active connections: ${count}`);
-    
+
     if (projectConnections && projectConnections.size > 0) {
       const message = JSON.stringify(data);
-      let successCount = 0;
-      let failCount = 0;
-      
+
       projectConnections.forEach((sendEvent) => {
         try {
           sendEvent(message);
-          successCount++;
         } catch (error) {
-          failCount++;
           console.error(`[SSEManager] Error sending to ${projectId}:`, error);
           // 移除失败的连接
           this.removeConnection(projectId, sendEvent);
         }
       });
-      
-      console.log(`[SSEManager] Sent to ${projectId}: ${successCount} succeeded, ${failCount} failed`);
     } else {
-      console.warn(`[SSEManager] No active connections for ${projectId}, event dropped`);
+      console.warn(
+        `[SSEManager] No active connections for ${projectId}, event dropped`
+      );
     }
   }
 
@@ -73,18 +63,6 @@ class SSEManager {
    */
   getConnectionCount(projectId: string): number {
     return this.connections.get(projectId)?.size || 0;
-  }
-
-  /**
-   * 获取所有项目的连接数量（用于调试）
-   * @returns 所有项目的连接数量映射
-   */
-  getAllConnections() {
-    const result: Record<string, number> = {};
-    this.connections.forEach((conns, projectId) => {
-      result[projectId] = conns.size;
-    });
-    return result;
   }
 }
 
