@@ -130,10 +130,10 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
               </div>
             </div>
             <TabsContent value="preview" className="flex-1 min-h-0 relative">
-              {progress ? (
-                <PreviewLoading />
-              ) : !!activeFragment ? (
+              {!!activeFragment ? (
                 <FragmentWeb data={activeFragment} />
+              ) : progress ? (
+                <PreviewLoading />
               ) : (
                 <div className="h-full flex items-center justify-center text-muted-foreground/40">
                   <EyeIcon className="h-16 w-16" />
