@@ -22,6 +22,7 @@ class SSEManager {
     const projectConnections = this.connections.get(projectId);
     if (projectConnections) {
       projectConnections.delete(sendEvent);
+
       if (projectConnections.size === 0) {
         this.connections.delete(projectId);
       }
@@ -35,15 +36,23 @@ class SSEManager {
    */
   sendEvent(projectId: string, data: unknown) {
     const projectConnections = this.connections.get(projectId);
+
     if (projectConnections && projectConnections.size > 0) {
       const message = JSON.stringify(data);
+
       projectConnections.forEach((sendEvent) => {
         try {
           sendEvent(message);
         } catch (error) {
-          console.error("Error sending SSE event:", error);
+          console.error(`[SSEManager] Error sending to ${projectId}:`, error);
+          // 移除失败的连接
+          this.removeConnection(projectId, sendEvent);
         }
       });
+    } else {
+      console.warn(
+        `[SSEManager] No active connections for ${projectId}, event dropped`
+      );
     }
   }
 

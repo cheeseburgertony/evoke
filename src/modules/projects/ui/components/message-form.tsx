@@ -1,6 +1,5 @@
 "use client";
 
-
 import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -19,13 +18,13 @@ import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useModelSelection } from "@/hooks/use-model-selection";
 
-const ModelSelector = dynamic(
-  () => import("@/components/model-selector"),
-  { ssr: false }
-);
+const ModelSelector = dynamic(() => import("@/components/model-selector"), {
+  ssr: false,
+});
 
 interface IMessageFormProps {
   projectId: string;
+  onStartGenerating?: () => void;
 }
 
 const formSchema = z.object({
@@ -35,7 +34,10 @@ const formSchema = z.object({
     .max(1000, { message: "Value is too long" }),
 });
 
-export const MessageForm = ({ projectId }: IMessageFormProps) => {
+export const MessageForm = ({
+  projectId,
+  onStartGenerating,
+}: IMessageFormProps) => {
   const t = useTranslations("MessageForm");
 
   const [isFocused, setIsFocused] = useState(false);
@@ -58,6 +60,8 @@ export const MessageForm = ({ projectId }: IMessageFormProps) => {
     trpc.messages.create.mutationOptions({
       onSuccess: () => {
         form.reset();
+        // 开启SSE连接以接收生成进度
+        onStartGenerating?.();
         // 标记数据为过期，触发重新获取
         queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId })
