@@ -28,6 +28,7 @@ export function useSSE(projectId: string, options: UseSSEOptions = {}) {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const reconnectAttemptsRef = useRef(0);
   const maxReconnectAttempts = 5;
+  const lastEventTimeRef = useRef<number>(Date.now()); // 追踪最后事件时间
   const onMessageRef = useRef(onMessage);
   const onErrorRef = useRef(onError);
   const onOpenRef = useRef(onOpen);
@@ -52,22 +53,26 @@ export function useSSE(projectId: string, options: UseSSEOptions = {}) {
         const eventSource = new EventSource(`/api/events/${projectId}`);
 
         eventSource.onopen = () => {
-          console.log("SSE connection established");
+          console.log(`[SSE Client] Connection established for ${projectId}`);
           reconnectAttemptsRef.current = 0;
+          lastEventTimeRef.current = Date.now();
           onOpenRef.current?.();
         };
 
         eventSource.onmessage = (event) => {
+          lastEventTimeRef.current = Date.now(); // 更新时间戳
+          
           try {
             const data = JSON.parse(event.data) as SSEMessage;
+            console.log(`[SSE Client] Received:`, data.type);
             onMessageRef.current?.(data);
           } catch (error) {
-            console.error("Failed to parse SSE message:", error);
+            console.error("[SSE Client] Failed to parse message:", error);
           }
         };
 
         eventSource.onerror = (error) => {
-          console.error("SSE connection error:", error);
+          console.error(`[SSE Client] Connection error for ${projectId}:`, error);
           eventSource.close();
           onErrorRef.current?.(error);
 
@@ -79,18 +84,36 @@ export function useSSE(projectId: string, options: UseSSEOptions = {}) {
               30000
             );
             console.log(
-              `Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current})`
+              `[SSE Client] Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current}/${maxReconnectAttempts})`
             );
 
             reconnectTimeoutRef.current = setTimeout(() => {
               connect();
             }, delay);
           } else {
-            console.error("Max reconnection attempts reached");
+            console.error("[SSE Client] Max reconnection attempts reached");
           }
         };
 
         eventSourceRef.current = eventSource;
+
+        // 添加超时检测 (60秒无消息自动重连)
+        const timeoutCheck = setInterval(() => {
+          const timeSinceLastEvent = Date.now() - lastEventTimeRef.current;
+          if (timeSinceLastEvent > 60000) {
+            console.warn(`[SSE Client] No events for ${timeSinceLastEvent}ms, reconnecting...`);
+            clearInterval(timeoutCheck);
+            eventSource.close();
+            connect();
+          }
+        }, 30000); // 每30秒检查一次
+
+        // 清理时也清除超时检查
+        const originalClose = eventSource.close.bind(eventSource);
+        eventSource.close = () => {
+          clearInterval(timeoutCheck);
+          originalClose();
+        };
       } catch (error) {
         console.error("Failed to create EventSource:", error);
       }

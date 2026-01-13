@@ -29,41 +29,67 @@ export async function GET(
 
   // 创建SSE流
   const encoder = new TextEncoder();
+  let isClosed = false; // 添加状态追踪
+
   const stream = new ReadableStream({
     start(controller) {
       // 发送初始连接消息
       const initialMessage = `data: ${JSON.stringify({
         type: "connected",
         projectId,
+        timestamp: Date.now(),
       })}\n\n`;
       controller.enqueue(encoder.encode(initialMessage));
 
-      // 注册连接处理器
+      // 安全的发送函数
       const sendEvent = (data: string) => {
-        controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+        if (isClosed) return; // 防止在关闭后发送
+        
+        try {
+          controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+        } catch (error) {
+          console.error(`[SSE] Failed to send event to ${projectId}:`, error);
+          isClosed = true;
+          sseManager.removeConnection(projectId, sendEvent);
+        }
       };
 
       sseManager.addConnection(projectId, sendEvent);
+      console.log(`[SSE] Connection established for project ${projectId}`);
 
-      // 心跳保持连接
+      // 缩短心跳间隔到15秒
       const heartbeat = setInterval(() => {
-        try {
-          controller.enqueue(encoder.encode(`: heartbeat\n\n`));
-        } catch {
+        if (isClosed) {
           clearInterval(heartbeat);
+          return;
         }
-      }, 30000);
+        
+        try {
+          controller.enqueue(encoder.encode(`: heartbeat ${Date.now()}\n\n`));
+        } catch (error) {
+          console.error(`[SSE] Heartbeat failed for ${projectId}:`, error);
+          clearInterval(heartbeat);
+          isClosed = true;
+        }
+      }, 15000); // 改为15秒
 
       // 清理函数
-      request.signal.addEventListener("abort", () => {
+      const cleanup = () => {
+        if (isClosed) return;
+        isClosed = true;
+        
         clearInterval(heartbeat);
         sseManager.removeConnection(projectId, sendEvent);
+        console.log(`[SSE] Connection closed for project ${projectId}`);
+        
         try {
           controller.close();
-        } catch {
-          // 忽略关闭错误
+        } catch (error) {
+          console.error(`[SSE] Error closing controller:`, error);
         }
-      });
+      };
+
+      request.signal.addEventListener("abort", cleanup);
     },
   });
 
@@ -73,6 +99,7 @@ export async function GET(
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
       "X-Accel-Buffering": "no",
+      "X-SSE-Timeout": "300", // 5分钟
     },
   });
 }
