@@ -63,7 +63,7 @@ export const ProjectForm = () => {
         // 标记数据为过期，触发重新获取
         queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
         queryClient.invalidateQueries(trpc.usage.status.queryOptions());
-        router.push(`/projects/${data.id}`);
+        router.push(`/projects/${data.id}?startSSE=true`);
       },
       onError: (error) => {
         toast.error(error.message);

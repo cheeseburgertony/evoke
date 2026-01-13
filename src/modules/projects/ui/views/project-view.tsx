@@ -5,6 +5,7 @@ import { useAuth } from "@clerk/nextjs";
 import { Suspense, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { CodeIcon, CrownIcon, EyeIcon } from "lucide-react";
 import { useSSE } from "@/hooks/use-sse";
 import { useTRPC } from "@/trpc/client";
@@ -35,10 +36,14 @@ interface IProjectViewProps {
 
 export const ProjectView = ({ projectId }: IProjectViewProps) => {
   const t = useTranslations("ProjectsViewsProjectView");
+  const searchParams = useSearchParams();
 
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabState, setTabState] = useState<"preview" | "code">("preview");
   const [progress, setProgress] = useState<ProcessingProgress | null>(null);
+  const [sseEnabled, setSseEnabled] = useState(
+    searchParams.get("startSSE") === "true"
+  );
   const ignoreProgressRef = useRef(false);
 
   const { has } = useAuth();
@@ -48,6 +53,7 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
 
   // 监听进度更新
   useSSE(projectId, {
+    enabled: sseEnabled,
     onMessage: (data) => {
       if (data.type === "project_name_updated") {
         // 更新项目名字
@@ -55,9 +61,10 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
           trpc.projects.getOne.queryOptions({ id: projectId })
         );
       } else if (data.type === "message_created") {
-        // 应用生成完毕
+        // 应用生成完毕，关闭 SSE 连接
         ignoreProgressRef.current = true;
         setProgress(null);
+        setSseEnabled(false);
         queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId })
         );
@@ -94,6 +101,7 @@ export const ProjectView = ({ projectId }: IProjectViewProps) => {
                 activeFragment={activeFragment}
                 setActiveFragment={setActiveFragment}
                 progress={progress}
+                onStartGenerating={() => setSseEnabled(true)} // 开始生成时开启 SSE
               />
             </Suspense>
           </ErrorBoundary>

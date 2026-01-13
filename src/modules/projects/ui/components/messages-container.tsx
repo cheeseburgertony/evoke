@@ -14,6 +14,7 @@ interface IMessagesContainerProps {
   activeFragment: Fragment | null;
   setActiveFragment: (fragment: Fragment | null) => void;
   progress: ProcessingProgress | null;
+  onStartGenerating?: () => void;
 }
 
 export const MessagesContainer = ({
@@ -21,6 +22,7 @@ export const MessagesContainer = ({
   activeFragment,
   setActiveFragment,
   progress,
+  onStartGenerating,
 }: IMessagesContainerProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastAIMessageIdRef = useRef<string | null>(null);
@@ -72,7 +74,10 @@ export const MessagesContainer = ({
       </div>
       <div className="relative p-3 pt-1">
         <div className="absolute -top-6 left-0 right-0 h-6 bg-linear-to-b from-transparent to-background/70 pointer-events-none" />
-        <MessageForm projectId={projectId} />
+        <MessageForm
+          projectId={projectId}
+          onStartGenerating={onStartGenerating}
+        />
       </div>
     </div>
   );
