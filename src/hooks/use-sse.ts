@@ -96,10 +96,10 @@ export function useSSE(projectId: string, options: UseSSEOptions = {}) {
 
         eventSourceRef.current = eventSource;
 
-        // 添加超时检测 (60秒无消息自动重连)
+        // 添加超时检测 (45秒无消息自动重连)
         const timeoutCheck = setInterval(() => {
           const timeSinceLastEvent = Date.now() - lastEventTimeRef.current;
-          if (timeSinceLastEvent > 60000) {
+          if (timeSinceLastEvent > 45000) {
             console.warn(
               `[SSE Client] No events for ${timeSinceLastEvent}ms, reconnecting...`
             );
@@ -107,7 +107,7 @@ export function useSSE(projectId: string, options: UseSSEOptions = {}) {
             eventSource.close();
             connect();
           }
-        }, 30000); // 每30秒检查一次
+        }, 15000); // 每15秒检查一次
 
         // 清理时也清除超时检查
         const originalClose = eventSource.close.bind(eventSource);
