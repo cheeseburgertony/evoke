@@ -329,7 +329,9 @@ export const codeAgentFunction = inngest.createFunction(
     const { output: fragmentTitleOutput } = await fragmentTitleGenerator.run(
       result.state.data.summary
     );
-    progress.completeStep(fragmentStepId, { content: "done" });
+    progress.completeStep(fragmentStepId, {
+      content: parseAgentOutput(fragmentTitleOutput),
+    });
 
     const responseStepId = progress.addStep("generatingFinalResponse", {
       type: "thinking",
