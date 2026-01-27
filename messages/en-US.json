@@ -119,7 +119,9 @@
   "ProjectList": {
     "noWorks": "No works yet",
     "worksOf": "{name}'s Works",
-    "me": "Me"
+    "me": "Me",
+    "showMore": "Show More",
+    "showLess": "Show Less"
   },
   "ProjectsViewsProjectView": {
     "code": "Code",

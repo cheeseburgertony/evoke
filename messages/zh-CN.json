@@ -119,7 +119,9 @@
   "ProjectList": {
     "noWorks": "暂无作品",
     "worksOf": "{name}的作品",
-    "me": "我"
+    "me": "我",
+    "showMore": "查看更多",
+    "showLess": "收起"
   },
   "ProjectsViewsProjectView": {
     "code": "代码",
