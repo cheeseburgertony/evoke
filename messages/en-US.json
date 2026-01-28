@@ -111,6 +111,9 @@
   },
   "ProjectHeader": {
     "appearance": "Appearance",
+    "rename": "Rename",
+    "renameSuccess": "Renamed successfully",
+    "renameError": "Failed to rename",
     "backToHome": "Back to Home",
     "dark": "Dark",
     "light": "Light",

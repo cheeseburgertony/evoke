@@ -111,6 +111,9 @@
   },
   "ProjectHeader": {
     "appearance": "外观",
+    "rename": "重命名",
+    "renameSuccess": "重命名成功",
+    "renameError": "重命名失败",
     "backToHome": "回到首页",
     "dark": "深色",
     "light": "浅色",
