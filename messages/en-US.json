@@ -111,6 +111,9 @@
   },
   "ProjectHeader": {
     "appearance": "Appearance",
+    "rename": "Rename",
+    "renameSuccess": "Renamed successfully",
+    "renameError": "Failed to rename",
     "backToHome": "Back to Home",
     "dark": "Dark",
     "light": "Light",
@@ -119,7 +122,9 @@
   "ProjectList": {
     "noWorks": "No works yet",
     "worksOf": "{name}'s Works",
-    "me": "Me"
+    "me": "Me",
+    "showMore": "Show More",
+    "showLess": "Show Less"
   },
   "ProjectsViewsProjectView": {
     "code": "Code",
