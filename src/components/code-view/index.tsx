@@ -5,6 +5,8 @@ import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-css";
 import "prismjs/components/prism-typescript";
+import "prismjs/plugins/line-numbers/prism-line-numbers";
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import "./code-theme.css";
 
 interface ICodeViewProps {
@@ -18,7 +20,7 @@ export const CodeView = ({ code, lang }: ICodeViewProps) => {
   }, [code]);
 
   return (
-    <pre className="p-2 bg-transparent border-none rounded-none m-0 text-xs">
+    <pre className="line-numbers p-4 bg-transparent border-none rounded-none m-0 text-sm leading-relaxed overflow-x-auto">
       <code className={`language-${lang}`}>{code}</code>
     </pre>
   );
