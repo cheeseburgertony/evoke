@@ -176,16 +176,17 @@ pre[class*='language-'] {
   cursor: help;
 }
 
-/* 移除行号右边的竖线并优化行号样式 */
-.line-numbers .line-numbers-rows {
-  border-right: none !important;
+.line-numbers-rows {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: var(--background, #fff);
 }
 
-.line-numbers .line-numbers-rows > span:before {
-  color: #999;
+.dark .line-numbers-rows {
+  background-color: var(--background, #24292e);
 }
 
-/* Dark 模式下的行号颜色 */
-.dark .line-numbers .line-numbers-rows > span:before {
-  color: #6a737d;
+pre[class*="language-"] {
+  padding-left: 0 !important;
 }
