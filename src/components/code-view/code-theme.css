@@ -175,3 +175,18 @@ pre[class*='language-'] {
 .dark .token.entity {
   cursor: help;
 }
+
+.line-numbers-rows {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: var(--background, #fff);
+}
+
+.dark .line-numbers-rows {
+  background-color: var(--background, #24292e);
+}
+
+pre[class*="language-"] {
+  padding-left: 0 !important;
+}
