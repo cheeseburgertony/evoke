@@ -7,7 +7,9 @@ export type AIModelIdType =
   | "qwen3-max"
   | "qwen3-coder-plus"
   | "zai-org/GLM-4.6"
-  | "glm-4.6";
+  | "glm-4.6"
+  | "Pro/zai-org/GLM-4.7"
+  | "Qwen/Qwen3.5-397B-A17B";
 
 export interface ModelConfig {
   id: AIModelIdType;
@@ -28,11 +30,12 @@ export interface ModelConfig {
 
 export const aiModels: ModelConfig[] = [
   {
-    id: "glm-4.6",
-    name: "GLM 4.6 Exp",
+    id: "zai-org/GLM-4.6",
+    name: "GLM 4.6",
     description: "智谱 AI 大模型",
     icon: "/zhipu.svg",
-    provider: "iflow",
+    provider: "silicon",
+    pro: true,
   },
   {
     id: "qwen3-coder-plus",
@@ -49,21 +52,29 @@ export const aiModels: ModelConfig[] = [
     provider: "iflow",
   },
   {
-    id: "zai-org/GLM-4.6",
-    name: "GLM 4.6",
+    id: "Pro/zai-org/GLM-4.7",
+    name: "GLM 4.7",
     description: "智谱 AI 大模型",
     icon: "/zhipu.svg",
     provider: "silicon",
     pro: true,
   },
   {
-    id: "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-    name: "Qwen 3 Coder",
-    description: "适合编程任务的强大模型",
+    id: "Qwen/Qwen3.5-397B-A17B",
+    name: "Qwen 3.5",
+    description: "Qwen AI 大模型",
     icon: "/tongyi.svg",
     provider: "silicon",
     pro: true,
   },
+  // {
+  //   id: "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+  //   name: "Qwen 3 Coder",
+  //   description: "适合编程任务的强大模型",
+  //   icon: "/tongyi.svg",
+  //   provider: "silicon",
+  //   pro: true,
+  // },
   {
     id: "deepseek-chat",
     name: "DeepSeek Chat",
