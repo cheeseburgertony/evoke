@@ -35,7 +35,6 @@ export const aiModels: ModelConfig[] = [
     description: "智谱 AI 大模型",
     icon: "/zhipu.svg",
     provider: "silicon",
-    pro: true,
   },
   {
     id: "qwen3-coder-plus",
