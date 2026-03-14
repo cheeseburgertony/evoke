@@ -115,4 +115,20 @@ export const projectsRouter = createTRPCRouter({
 
       return updatedProject;
     }),
+  remove: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, { message: "Project ID is required" }),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const deletedProject = await prisma.project.delete({
+        where: {
+          id: input.id,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      return deletedProject;
+    }),
 });
