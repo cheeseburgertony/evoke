@@ -44,6 +44,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 
 const localeMap = {
   "zh-CN": zhCN,
@@ -264,7 +265,8 @@ const ProjectItem = ({
                   renameValue === project.name
                 }
               >
-                {t("save")}
+                {renameMutation.isPending ? <Spinner className="mr-2" /> : null}
+                {renameMutation.isPending ? t("saving") : t("save")}
               </Button>
             </DialogFooter>
           </form>
@@ -294,6 +296,7 @@ const ProjectItem = ({
               className="bg-red-500 hover:bg-red-600 focus:ring-red-500 text-white"
               disabled={removeMutation.isPending}
             >
+              {removeMutation.isPending ? <Spinner className="mr-2" /> : null}
               {removeMutation.isPending ? t("deleting") : t("delete")}
             </AlertDialogAction>
           </AlertDialogFooter>

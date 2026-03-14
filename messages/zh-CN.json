@@ -135,6 +135,7 @@
     "renameTitle": "重命名项目",
     "renameDescription": "请输入新的项目名称。",
     "save": "保存",
+    "saving": "保存中...",
     "renameSuccess": "重命名成功",
     "renameError": "重命名失败"
   },

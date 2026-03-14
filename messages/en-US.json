@@ -135,6 +135,7 @@
     "renameTitle": "Rename Project",
     "renameDescription": "Enter a new name for your project.",
     "save": "Save",
+    "saving": "Saving...",
     "renameSuccess": "Project renamed successfully",
     "renameError": "Failed to rename project"
   },
