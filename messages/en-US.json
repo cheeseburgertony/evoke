@@ -124,7 +124,19 @@
     "worksOf": "{name}'s Works",
     "me": "Me",
     "showMore": "Show More",
-    "showLess": "Show Less"
+    "showLess": "Show Less",
+    "deleteTitle": "Delete Project",
+    "deleteDescription": "Are you sure you want to delete this project? This action cannot be undone.",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "rename": "Rename",
+    "moreOptions": "More options",
+    "renameTitle": "Rename Project",
+    "renameDescription": "Enter a new name for your project.",
+    "save": "Save",
+    "renameSuccess": "Project renamed successfully",
+    "renameError": "Failed to rename project"
   },
   "ProjectsViewsProjectView": {
     "code": "Code",

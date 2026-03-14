@@ -124,7 +124,19 @@
     "worksOf": "{name}的作品",
     "me": "我",
     "showMore": "查看更多",
-    "showLess": "收起"
+    "showLess": "收起",
+    "deleteTitle": "删除项目",
+    "deleteDescription": "确定要删除这个项目吗？此操作无法撤销。",
+    "delete": "删除",
+    "cancel": "取消",
+    "deleting": "删除中",
+    "rename": "重命名",
+    "moreOptions": "更多选项",
+    "renameTitle": "重命名项目",
+    "renameDescription": "请输入新的项目名称。",
+    "save": "保存",
+    "renameSuccess": "重命名成功",
+    "renameError": "重命名失败"
   },
   "ProjectsViewsProjectView": {
     "code": "代码",
