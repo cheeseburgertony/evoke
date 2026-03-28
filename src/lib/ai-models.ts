@@ -7,6 +7,7 @@ export type AIModelIdType =
   | "qwen3-max"
   | "qwen3-coder-plus"
   | "zai-org/GLM-4.6"
+  | "Pro/zai-org/GLM-5"
   | "glm-4.6"
   | "Pro/zai-org/GLM-4.7"
   | "Qwen/Qwen3.5-397B-A17B";
@@ -30,8 +31,8 @@ export interface ModelConfig {
 
 export const aiModels: ModelConfig[] = [
   {
-    id: "zai-org/GLM-4.6",
-    name: "GLM 4.6",
+    id: "Pro/zai-org/GLM-4.7",
+    name: "GLM 4.7",
     description: "智谱 AI 大模型",
     icon: "/zhipu.svg",
     provider: "silicon",
@@ -51,8 +52,8 @@ export const aiModels: ModelConfig[] = [
     provider: "iflow",
   },
   {
-    id: "Pro/zai-org/GLM-4.7",
-    name: "GLM 4.7",
+    id: "Pro/zai-org/GLM-5",
+    name: "GLM 5",
     description: "智谱 AI 大模型",
     icon: "/zhipu.svg",
     provider: "silicon",
