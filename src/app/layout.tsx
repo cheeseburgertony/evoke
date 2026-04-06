@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { enUS, zhCN } from "@clerk/localizations";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { Analytics } from "@vercel/analytics/next";
 import { type Locale } from "@/i18n/config";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
@@ -54,6 +55,7 @@ export default async function RootLayout({
               <NextIntlClientProvider>{children}</NextIntlClientProvider>
             </TRPCReactProvider>
             <Toaster />
+            <Analytics />
           </ThemeProvider>
         </body>
       </html>
