@@ -67,14 +67,6 @@ export const createModelInstance = (
   const model = aiModels.find((model) => model.id === modelId);
 
   switch (model?.provider) {
-    case "modelscope":
-      return openai({
-        model: model.id,
-        baseUrl: process.env.MODELSCOPE_BASE_URL,
-        apiKey: process.env.MODELSCOPE_API_KEY,
-        defaultParameters: { temperature },
-      });
-
     case "longcat":
       return openai({
         model: model.id,
@@ -96,14 +88,6 @@ export const createModelInstance = (
         model: model.id,
         baseUrl: process.env.SILICON_BASE_URL,
         apiKey: process.env.SILICON_API_KEY,
-        defaultParameters: { temperature },
-      });
-
-    case "iflow":
-      return openai({
-        model: model.id,
-        baseUrl: process.env.IFLOW_BASE_URL,
-        apiKey: process.env.IFLOW_API_KEY,
         defaultParameters: { temperature },
       });
 
