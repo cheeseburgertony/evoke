@@ -83,7 +83,7 @@ export const codeAgentFunction = inngest.createFunction(
       name: "code-agent",
       description: "An expert coding agent",
       system: PROMPT,
-      model: createModelInstance(event.data.modelId || "deepseek-chat"),
+      model: createModelInstance(event.data.modelId || "deepseek-v4-pro"),
       tools: [
         // 终端工具，允许在沙盒中运行命令
         createTool({
@@ -280,7 +280,7 @@ export const codeAgentFunction = inngest.createFunction(
         name: "project-title-generator",
         description: "A project title generator",
         system: PROJECT_TITLE_PROMPT,
-        model: createModelInstance("LongCat-Flash-Chat", 0.4),
+        model: createModelInstance("deepseek-ai/DeepSeek-V3.2", 0.4),
       });
 
       const { output: projectTitleOutput } = await projectTitleGenerator.run(
@@ -313,14 +313,14 @@ export const codeAgentFunction = inngest.createFunction(
       name: "fragment-title-generator",
       description: "A fragment title generator",
       system: FRAGMENT_TITLE_PROMPT,
-      model: createModelInstance("LongCat-Flash-Chat", 0.1),
+      model: createModelInstance("deepseek-ai/DeepSeek-V3.2", 0.1),
     });
 
     const responseGenerator = createAgent<AgentState>({
       name: "response-generator",
       description: "A response title generator",
       system: RESPONSE_PROMPT,
-      model: createModelInstance("LongCat-Flash-Chat", 0.6),
+      model: createModelInstance("deepseek-ai/DeepSeek-V3.2", 0.6),
     });
 
     const fragmentStepId = progress.addStep("generatingFragmentTitle", {

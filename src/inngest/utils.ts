@@ -101,7 +101,7 @@ export const createModelInstance = (
 
     default:
       return openai({
-        model: "deepseek-chat",
+        model: "deepseek-v4-flash",
         baseUrl: process.env.DEEPSEEK_BASE_URL,
         apiKey: process.env.DEEPSEEK_API_KEY,
         defaultParameters: { temperature },
